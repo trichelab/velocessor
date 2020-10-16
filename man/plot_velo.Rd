@@ -4,10 +4,12 @@
 \alias{plot_velo}
 \title{Generate interactive 3D UMAP plot with cones for velocity. Work in progress.}
 \usage{
-plot_velo(txis, ...)
+plot_velo(txis, colr = "velocity_pseudotime", ...)
 }
 \arguments{
 \item{txis}{a SingleCellExperiment with metadata(txis)$scVelo}
+
+\item{colr}{column to use for colors (else just velocity_pseudotime)}
 
 \item{...}{optional arguments to pass to plotly::plot_ly()}
 }
