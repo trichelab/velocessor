@@ -3,16 +3,25 @@
 #' The opacity of the cones is manipulated so that dot colors can be seen. 
 #' 
 #' @param txis        a SingleCellExperiment with metadata(txis)$scVelo
+#' @param colr        column to use for colors (else just velocity_pseudotime)
 #' @param ...         optional arguments to pass to plotly::plot_ly()
 #' 
 #' @return            a plotly plot
 #' 
 #' @import plotly
+#' @import viridis
 #' @import Polychrome
 #' 
 #' @export 
-plot_velo <- function(txis, ...) {
+plot_velo <- function(txis, colr="velocity_pseudotime", ...) {
  
+  if (!"scVelo" %in% names(metadata(txis))) stop("Cannot find scVelo output!")
+  if (!"velocity_pseudotime" %in% names(colData(txis))) {
+    colData(txis)[, "velocity_pseudotime"] <- 
+      metadata(txis)$scVelo$velocity_pseudotime
+  }
+  if (!colr %in% names(colData(txis))) stop("Cannot find txis$", colr, "!")
+  
   if ("embedded" %in% names(metadata(txis))) { 
     embedded <- metadata(txis)$embedded
   } else {
@@ -32,12 +41,17 @@ plot_velo <- function(txis, ...) {
   grid.df$W <- grid.df$endZ - grid.df$startZ
 
   # for colors
-  grid.df$CLUSTER <- as.factor(colData(txis)[rownames(grid.df), "cluster"])
+  grid.df$COLOR <- colData(txis)[rownames(grid.df), colr]
   grid.df$SAMPLE <- as.factor(colData(txis)[rownames(grid.df), "sample"])
 
-  seed <- c("#ff0000", "#00ff00", "#0000ff")
-  pal <- createPalette(nlevels(grid.df$CLUSTER), seed, prefix="cluster")
-
+  seed <- c("#ff0000", "#00ff00", "#0000ff") # R, G, B 
+  if (colr == "velocity_pseudotime") {
+    grid.df$COLOR <- paste0(round(grid.df$COLOR * 20) * 5, "%")
+    pal <- viridis(20)
+  } else {
+    pal <- createPalette(nlevels(as.factor(grid.df$COLOR)), seed, prefix="colr")
+  }
+  
   p <- plot_ly(grid.df,
                type = "cone",
                showscale = FALSE,
@@ -50,7 +64,7 @@ plot_velo <- function(txis, ...) {
                v = ~V,
                w = ~W,
                text = ~SAMPLE,
-               color = ~CLUSTER,
+               color = ~COLOR,
                colorscale = "Greys",
                alpha_stroke = I(0.5),
                alpha = I(0.5),
