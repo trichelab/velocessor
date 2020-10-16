@@ -1,0 +1,38 @@
+Package: velocessor
+Type: Package
+Title: The world's dumbest RNA velocity loader
+Description: Velocessor provides some convenience functions for RNA velocity loading, batch correction, and plotting in a Bioconductor environment. 
+Version: 0.1.1
+Date: 2020-10-16
+Authors@R: person("Tim", "Triche, Jr.", role=c("aut", "cre"), email="trichelab@gmail.com")
+Author: Tim Triche, Jr. [aut, cre]
+Maintainer: Tim Triche, Jr. <trichelab@gmail.com>
+URL: https://github.com/trichelab/velocessor
+BugReports: https://github.com/trichelab/velocessor/issues
+License: MIT + file LICENSE
+Depends:
+    R (>= 3.0.0)
+Imports:
+    BiocParallel,
+    Matrix,
+    MatrixGenerics,
+    Polychrome,
+    SingleCellExperiment,
+    basilisk,
+    eisaR,
+    fishpond,
+    igraph,
+    jsonlite,
+    plotly,
+    scDblFinder,
+    scater,
+    scds,
+    scran,
+    scuttle,
+    tximeta,
+    velociraptor
+Suggests:
+    covr,
+    testthat
+RoxygenNote: 7.1.1
+Roxygen: list(markdown = TRUE)
