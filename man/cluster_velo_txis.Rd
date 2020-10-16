@@ -4,12 +4,14 @@
 \alias{cluster_velo_txis}
 \title{stupid-simple Louvain clustering. Doesn't currently care about unspliced.}
 \usage{
-cluster_velo_txis(txis, type = "jaccard", use.dimred = NULL, ...)
+cluster_velo_txis(txis, k = 20, type = "rank", use.dimred = NULL, ...)
 }
 \arguments{
 \item{txis}{a SingleCellExperiment}
 
-\item{type}{what type of SNNGraph to construct ("jaccard")}
+\item{k}{number of nearest neighbors (20)}
+
+\item{type}{what type of SNNGraph to construct ("rank")}
 
 \item{use.dimred}{which reducedDimension embedding to use (autodetermine)}
 
