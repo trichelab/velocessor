@@ -49,7 +49,8 @@ plot_velo <- function(txis, colr="velocity_pseudotime", ...) {
     grid.df$COLOR <- paste0(round(grid.df$COLOR * 20) * 5, "%")
     pal <- viridis(20)
   } else {
-    pal <- createPalette(nlevels(as.factor(grid.df$COLOR)), seed, prefix="colr")
+    grid.df$COLOR <- as.factor(grid.df$COLOR)
+    pal <- createPalette(nlevels(grid.df$COLOR), seed, prefix="color")
   }
   
   p <- plot_ly(grid.df,
@@ -69,11 +70,10 @@ plot_velo <- function(txis, colr="velocity_pseudotime", ...) {
                alpha_stroke = I(0.5),
                alpha = I(0.5),
                ...)
-  p <- add_markers(p)
-  p <- layout(p,
-              scene = list(xaxis = list(title = 'UMAP1'),
-              yaxis = list(title = 'UMAP2'),
-              zaxis = list(title = 'UMAP3')))
-  return(p)
+
+  layout(add_markers(p),
+         scene = list(xaxis = list(title = 'UMAP1'),
+                      yaxis = list(title = 'UMAP2'),
+                      zaxis = list(title = 'UMAP3')))
 
 }
