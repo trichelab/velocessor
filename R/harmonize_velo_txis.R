@@ -30,7 +30,7 @@ harmonize_velo_txis <- function(txis, colname="sample", UMAP=TRUE, how=0, ...) {
   }
 
   message("Harmonizing...")
-  txis <- RunHarmony(txis, colname, ...)
+  txis <- harmony::RunHarmony(txis, colname, ...)
 
   # short circuit if no UMAP
   if (UMAP) {
