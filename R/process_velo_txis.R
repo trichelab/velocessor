@@ -50,15 +50,18 @@
 process_velo_txis <- function(runs, txstub, anno=NULL, qm="alevin/quants_mat.gz", QC=TRUE, HARMONY=FALSE, CLUSTER=TRUE, DEDUPE=FALSE, SCVELO=FALSE, BPPARAM=SerialParam()){
 
   stopifnot(!is.null(names(runs)))
-  txome <- file.path(txpath, paste(txstub, "json", sep="."))
+ 
+  txome <- paste(txstub, "json", sep=".")
+  stopifnot(file.exists(txome))
   tximeta::loadLinkedTxome(jsonFile=txome)
   
-  feats <- file.path(txpath, paste(txstub, "features", "tsv", sep="."))
-  cg <- read.delim(feats, header=TRUE, as.is=TRUE)
-  colnames(cg)[colnames(cg) == "intron"] <- "unspliced"
-
   gtf <- jsonlite::fromJSON(file=txome)[[1]][["gtf"]]
   stopifnot(file.exists(gtf)) # so tximeta doesn't puke
+  
+  feats <- paste(txstub, "features", "tsv", sep=".")
+  stopifnot(file.exists(feats))
+  cg <- read.delim(feats, header=TRUE, as.is=TRUE)
+  colnames(cg)[colnames(cg) == "intron"] <- "unspliced"
 
   cdat <- data.frame(names=names(runs),
                      files=paste(runs, qm, sep="/"),

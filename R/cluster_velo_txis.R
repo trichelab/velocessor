@@ -13,7 +13,7 @@
 #' @return            Louvain cluster assignments for each cell. 
 #' 
 #' @import scran
-#' @import igraph 
+#' @importFrom igraph cluster_louvain
 #' 
 #' @export 
 cluster_velo_txis <- function(txis, k=20, type="rank", use.dimred=NULL, ...) { 

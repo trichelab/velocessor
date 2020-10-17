@@ -4,10 +4,20 @@
 \alias{plot_velo}
 \title{Generate interactive 3D UMAP plot with cones for velocity. Work in progress.}
 \usage{
-plot_velo(txis, colr = "velocity_pseudotime", ...)
+plot_velo(
+  txis,
+  embed = "UMAP",
+  replace = FALSE,
+  colr = "velocity_pseudotime",
+  ...
+)
 }
 \arguments{
 \item{txis}{a SingleCellExperiment with metadata(txis)$scVelo}
+
+\item{embed}{which reducedDims() element to use for plotting? (UMAP)}
+
+\item{replace}{replace any existing metadata element \code{embedded}? (FALSE)}
 
 \item{colr}{column to use for colors (else just velocity_pseudotime)}
 
@@ -18,5 +28,7 @@ plot_velo(txis, colr = "velocity_pseudotime", ...)
 }
 }
 \description{
-The opacity of the cones is manipulated so that dot colors can be seen.
+The opacity of the cones is manipulated so that dot colors are visible.
+The provided SingleCellExperiment \code{txis} MUST have an element \code{scVelo} in
+its metadata, and it would be a good idea for
 }
