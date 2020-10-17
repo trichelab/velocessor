@@ -2,7 +2,7 @@ Package: velocessor
 Type: Package
 Title: The world's dumbest RNA velocity loader
 Description: Velocessor provides some convenience functions for RNA velocity loading, batch correction, and plotting in a Bioconductor environment. 
-Version: 0.1.8
+Version: 0.1.9
 Date: 2020-10-17
 Authors@R: person("Tim", "Triche, Jr.", role=c("aut", "cre"), email="trichelab@gmail.com")
 Author: Tim Triche, Jr. [aut, cre]
@@ -11,15 +11,15 @@ URL: https://github.com/trichelab/velocessor
 BugReports: https://github.com/trichelab/velocessor/issues
 License: MIT + file LICENSE
 Depends:
-    R (>= 3.0.0)
+    R (>= 3.0.0),
+    SingleCellExperiment,
+    BiocParallel
 Imports:
-    BiocParallel,
     Matrix,
     MatrixGenerics,
     Polychrome,
     viridis,
     SummarizedExperiment,
-    SingleCellExperiment,
     basilisk,
     eisaR,
     fishpond,
