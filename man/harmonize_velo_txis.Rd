@@ -4,18 +4,18 @@
 \alias{harmonize_velo_txis}
 \title{test harness for velocity correction, currently just runs on spliced}
 \usage{
-harmonize_velo_txis(txis, colname = "sample", how = NULL, ...)
+harmonize_velo_txis(txis, colname = "sample", UMAP = TRUE, how = 0, ...)
 }
 \arguments{
 \item{txis}{a SingleCellExperiment}
 
 \item{colname}{name of colData column with the batch variable ("sample")}
 
+\item{UMAP}{update UMAP with runUMAP after harmonizing? (TRUE)}
+
 \item{how}{how to respect spliced/unspliced relation, currently unused}
 
 \item{...}{other arguments to pass to RunHarmony}
-
-\item{UMAP}{update UMAP with runUMAP after harmonizing? (TRUE)}
 }
 \value{
 \preformatted{     a SingleCellExperiment with "HARMONY" in reducedDimNames

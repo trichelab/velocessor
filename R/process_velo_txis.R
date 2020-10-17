@@ -35,19 +35,17 @@
 #' 
 #' @return        a SingleCellExperiment with 
 #' 
-#' @import scds
 #' @import eisaR
 #' @import scran
 #' @import tximeta
 #' @import jsonlite
 #' @import fishpond
 #' @import basilisk
-#' @import scDblFinder
 #' @import velociraptor
 #' @import BiocParallel 
 #' 
 #' @export
-process_velo_txis <- function(runs, txstub, anno=NULL, qm="alevin/quants_mat.gz", QC=TRUE, HARMONY=FALSE, CLUSTER=TRUE, DEDUPE=FALSE, SCVELO=FALSE, BPPARAM=SerialParam()){
+process_velo_txis <- function(runs, txstub, anno=NULL, qm="alevin/quants_mat.gz", QC=TRUE, HARMONY=FALSE, CLUSTER=TRUE, DEDUPE=FALSE, SCVELO=FALSE, BPPARAM=SerialParam()) {
 
   stopifnot(!is.null(names(runs)))
  
@@ -78,48 +76,17 @@ process_velo_txis <- function(runs, txstub, anno=NULL, qm="alevin/quants_mat.gz"
   txis$sample <- get_sample_from_barcode(txis) # better than auto
 
   # add annotation? 
-  if (!is.null(anno) & all(rownames(txis) %in% names(anno))) {
-    rowRanges(txis) <- anno[rownames(txis)] 
+  rowData(txis)$ENSG <- sapply(strsplit(rownames(txis), "\\."), `[`, 1)
+  if (!is.null(anno) & all(rowData(txis)$ENSG %in% names(anno))) {
+    rowRanges(txis) <- anno[rowData(txis)$ENSG]
   } 
-
-  # cluster?
-  if (CLUSTER | DEDUPE | SCVELO) {
-    txis$cluster <- cluster_velo_txis(txis)
-  }
   
-  # dedupe? 
-  if (DEDUPE | SCVELO) {
-    txis <- dedupe_velo_txis(txis)
-    txis <- scDblFinder(txis, clusters=txis$cluster, samples=txis$sample)
-    txis <- txis[, txis$scDblFinder.class == "singlet"]
-  }
-
-  # batch correct?
+  # optional embellishments
+  if (CLUSTER | DEDUPE | SCVELO) txis$cluster <- cluster_velo_txis(txis)
   if (HARMONY) txis <- harmonize_velo_txis(txis)
-
-  # find velocity?
-  if (SCVELO) {
-    message("Removing dead cells and low-variance genes for velocity")
-    mt <- names(subset(rowRanges(txis), seqnames %in% c("chrM", "chrMT", "MT")))
-    txis$mtPercent <- (colSums(counts(txis[mt,])) / colSums(counts(txis))) * 100
-    mtCut <- max(quantile(txis$mtPercent, 0.95), 10)
-    live <- colnames(txis)[txis$mtPercent < mtCut]
-    dec <- modelGeneVar(txis[, live])
-    HVGs <- getTopHVGs(dec, n=1000)
-    metadata(txis)$scVelo <- 
-      scvelo(txis, subset.row=HVGs, assay.X="spliced", mode="stochastic", ...) 
-
-    message("Adding velocity pseudotime...")
-    txis$velocity_pseudotime <- metadata(txis)$scVelo$velocity_pseudotime
-    
-    message("Embedding velocity onto UMAP coordinates...")
-    embedded <- embedVelocity(reducedDim(txis, "UMAP"), metadata(txis)$scVelo)
-    metadata(txis)$embedded <- embedded
-
-    message("Added scVelo (stochastic mode) output to metadata(txis)$scVelo")
-  }
-
-  # done
+  if (DEDUPE | SCVELO) txis <- drop_doublets(dedupe_velo_txis(txis))
+  if (DEDUPE & HARMONY) txis <- harmonize_velo_txis(txis)
+  if (SCVELO) txis <- compute_velocity(txis, ...) 
   return(txis)
 
 }

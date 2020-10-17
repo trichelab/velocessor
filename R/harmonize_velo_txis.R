@@ -16,9 +16,9 @@
 #' @import SingleCellExperiment
 #' 
 #' @export
-harmonize_velo_txis <- function(txis, colname="sample", how=NULL, ...) { 
+harmonize_velo_txis <- function(txis, colname="sample", UMAP=TRUE, how=0, ...) {
   
-  if (!attachNamespace("harmony")) {
+  if (!requireNamespace("harmony")) {
     message("You do not have harmony installed.")
     message("Visit https://github.com/immunogenomics/harmony for instructions.")
     stop("Cannot proceed without (non-Bioconductor) 'harmony' package.")
