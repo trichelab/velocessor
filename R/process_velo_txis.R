@@ -55,7 +55,7 @@ process_velo_txis <- function(runs, txstub, anno=NULL, qm="alevin/quants_mat.gz"
   stopifnot(file.exists(txome))
   tximeta::loadLinkedTxome(jsonFile=txome)
   
-  gtf <- jsonlite::fromJSON(file=txome)[[1]][["gtf"]]
+  gtf <- jsonlite::fromJSON(txome)[[1]][["gtf"]]
   stopifnot(file.exists(gtf)) # so tximeta doesn't puke
   
   feats <- paste(txstub, "features", "tsv", sep=".")
