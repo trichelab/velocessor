@@ -29,6 +29,11 @@ harmonize_velo_txis <- function(txis, colname="sample", UMAP=TRUE, how=0, ...) {
     else stop("The column ", colname, " was not found in names(colData(txis)).")
   }
 
+  if (!"PCA" %in% reducedDimNames(txis)) {
+    message("Computing PCA (needed by Harmony)...") 
+    txis <- runPCA(txis)
+  }
+
   message("Harmonizing...")
   txis <- harmony::RunHarmony(txis, colname, ...)
 

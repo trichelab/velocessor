@@ -74,6 +74,7 @@ process_velo_txis <- function(runs, txstub, anno=NULL, qm="alevin/quants_mat.gz"
   txis <- do.call(cbind, bplapply(by_sample, import_velo_txis,
                                   cg=cg, QC=QC, BPPARAM=BPPARAM))
   txis$sample <- get_sample_from_barcode(txis) # better than auto
+  txis <- runPCA(txis)
 
   # add annotation? 
   rowData(txis)$ENSG <- sapply(strsplit(rownames(txis), "\\."), `[`, 1)
