@@ -29,6 +29,13 @@ compute_velocity <- function(txis, ...) {
   txis$velocity_pseudotime <- metadata(txis)$scVelo$velocity_pseudotime
     
   message("Embedding velocity onto UMAP coordinates...")
+  if (!"UMAP" %in% reducedDimNames(txis)) { 
+    if ("HARMONY" %in% reducedDimNames(txis)) {
+      txis <- runUMAP(txis, ncomponents=3, name="HARMONY")
+    } else { 
+      txis <- runUMAP(txis, ncomponents=3)
+    } 
+  }
   embedded <- embedVelocity(reducedDim(txis, "UMAP"), metadata(txis)$scVelo)
   metadata(txis)$embedded <- embedded
 

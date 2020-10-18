@@ -45,7 +45,7 @@
 #' @import BiocParallel 
 #' 
 #' @export
-process_velo_txis <- function(runs, txstub, anno=NULL, qm="alevin/quants_mat.gz", QC=TRUE, HARMONY=FALSE, CLUSTER=TRUE, DEDUPE=FALSE, SCVELO=FALSE, BPPARAM=SerialParam()) {
+process_velo_txis <- function(runs, txstub, anno=NULL, qm="alevin/quants_mat.gz", QC=TRUE, HARMONY=FALSE, CLUSTER=TRUE, DEDUPE=FALSE, SCVELO=FALSE, ..., BPPARAM=SerialParam()) {
 
   stopifnot(!is.null(names(runs)))
  

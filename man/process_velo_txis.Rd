@@ -14,6 +14,7 @@ process_velo_txis(
   CLUSTER = TRUE,
   DEDUPE = FALSE,
   SCVELO = FALSE,
+  ...,
   BPPARAM = SerialParam()
 )
 }
@@ -36,9 +37,9 @@ process_velo_txis(
 
 \item{SCVELO}{run scVelo on the (perhaps harmonized) result? (FALSE, slow)}
 
-\item{BPPARAM}{if running in parallel, provide a MulticoreParam or similar}
-
 \item{...}{other arguments to pass to velociraptor::scvelo, if any}
+
+\item{BPPARAM}{if running in parallel, provide a MulticoreParam or similar}
 }
 \value{
 \preformatted{   a SingleCellExperiment with 

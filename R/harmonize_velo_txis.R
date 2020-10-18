@@ -7,7 +7,6 @@
 #' 
 #' @param txis      a SingleCellExperiment
 #' @param colname   name of colData column with the batch variable ("sample")
-#' @param UMAP      update UMAP with runUMAP after harmonizing? (TRUE) 
 #' @param how       how to respect spliced/unspliced relation, currently unused
 #' @param ...       other arguments to pass to RunHarmony
 #' 
@@ -16,7 +15,7 @@
 #' @import SingleCellExperiment
 #' 
 #' @export
-harmonize_velo_txis <- function(txis, colname="sample", UMAP=TRUE, how=0, ...) {
+harmonize_velo_txis <- function(txis, colname="sample", how="default", ...) {
   
   if (!requireNamespace("harmony")) {
     message("You do not have harmony installed.")
@@ -38,16 +37,13 @@ harmonize_velo_txis <- function(txis, colname="sample", UMAP=TRUE, how=0, ...) {
   txis <- harmony::RunHarmony(txis, colname, ...)
 
   # short circuit if no UMAP
-  if (UMAP) {
-    message("Updating UMAP...")
-    if ("UMAP" %in% reducedDimNames(txis)) {
-      ncomp <- ncol(reducedDim(txis, "UMAP"))
-    } else {
-      ncomp <- 3 # the minimum that I find useful 
-    }
-    txis <- runUMAP(txis, ncomponents=ncomp, name="HARMONY")
+  message("Updating UMAP...")
+  if ("UMAP" %in% reducedDimNames(txis)) {
+    ncomp <- ncol(reducedDim(txis, "UMAP"))
+  } else {
+    ncomp <- 3 # the minimum that I find useful 
   }
-
+  txis <- runUMAP(txis, ncomponents=ncomp, name="HARMONY")
   message("Done.")
   return(txis)
 
