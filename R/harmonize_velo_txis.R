@@ -1,4 +1,4 @@
-#' test harness for velocity correction, currently just runs on spliced 
+#' harness for velocity correction (currently ignorant of spliced/unspliced)
 #' 
 #' Harmony is not a Bioconductor package, so the user needs to install it from 
 #' \url{https://github.com/immunogenomics/harmony} prior to using this function.

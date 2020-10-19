@@ -2,7 +2,9 @@
 #' 
 #' The opacity of the cones is manipulated so that dot colors are visible.
 #' The provided SingleCellExperiment `txis` MUST have an element `scVelo` in 
-#' its metadata, and it would be a good idea for 
+#' its metadata, and that element (a SingleCellExperiment) needs to have a 
+#' colData column "velocity_pseudotime" unless an argument 'colr' is provided.
+#' (Hence the references internally to "PSEUDOTIME" rather than "COLOR") 
 #' 
 #' @param txis        a SingleCellExperiment with metadata(txis)$scVelo
 #' @param embed       which reducedDims() element to use for plotting? (UMAP)
@@ -22,7 +24,7 @@ plot_velo <- function(txis, embed="UMAP", replace=FALSE, colr="velocity_pseudoti
 
   # sanity checking  
   if (!"scVelo" %in% names(metadata(txis))) stop("Cannot find scVelo output!")
-  if (!"velocity_pseudotime" %in% names(metadata(txis)$scVelo)) {
+  if (!"velocity_pseudotime" %in% names(colData(metadata(txis)$scVelo))) {
     stop("You need to have actual scVelo output in your SCE metadata.")
   }
   if (!"velocity_pseudotime" %in% names(colData(txis))) {
@@ -48,26 +50,24 @@ plot_velo <- function(txis, embed="UMAP", replace=FALSE, colr="velocity_pseudoti
   # for cones
   starts <- c("U"="X", "V"="Y", "W"="Z")
   ends <- paste0("end", starts)
+  names(ends) <- names(starts)
   for (n in names(ends)) dat[, n] <- dat[, ends[n]] - dat[, starts[n]]
 
   # for colors and point labels 
-  dat$COLOR <- colData(txis)[rownames(dat), colr]
+  dat$PSEUDOTIME <- colData(txis)[rownames(dat), colr]
   if (colr == "velocity_pseudotime") {
-    dat$COLOR <- round(dat$COLOR * 100) # percent
+    dat$PSEUDOTIME <- round(dat$PSEUDOTIME * 100) # percent
     pal <- inferno(100) # colorful continuous scale
   } else {
-    dat$COLOR <- as.factor(dat$COLOR)
+    dat$PSEUDOTIME <- as.factor(dat$PSEUDOTIME)
     seed <- c("#ff0000", "#00ff00", "#0000ff") # R, G, B 
-    pal <- createPalette(nlevels(dat$COLOR), seed, prefix="color")
+    pal <- createPalette(nlevels(dat$PSEUDOTIME), seed, prefix="color")
   }
-  dat$SAMPLE <- as.factor(colData(txis)[rownames(dat), "sample"])
+  dat$SAMPLE <- colData(txis)[rownames(dat), "sample"]
+  dat$LABEL <- paste0(dat$SAMPLE, ": ", dat$PSEUDOTIME, "%") 
 
   # for axis labels and formatting
-  axes <- lapply(list(xaxis=1, yaxis=2, zaxis=3), 
-                 function(i) list(title=paste0(embed, i), 
-                                  showticklabels = FALSE,
-                                  showline = FALSE,
-                                  showgrid = FALSE))
+  axes <- lapply(list(xaxis=1, yaxis=2, zaxis=3), .clean_axis, embed=embed)
 
   # build the plot
   p <- plot_ly(dat,
@@ -80,15 +80,28 @@ plot_velo <- function(txis, embed="UMAP", replace=FALSE, colr="velocity_pseudoti
                colors = pal, 
                type = "cone",
                opacity = 0.5,
-               text = ~SAMPLE,
-               color = ~COLOR,
+               text = ~LABEL,
+               color = ~PSEUDOTIME,
                hoverinfo = "text",
                showscale = FALSE,
+               showlegend = FALSE,
                colorscale = "Greys",
                alpha_stroke = I(0.5),
-               alpha = I(0.5),
+               alpha = I(0.75),
                ...)
   p <- config(p, displayModeBar = FALSE)
   layout(add_markers(p), scene = axes)
+
+}
+
+
+# helper fn
+.clean_axis <- function(i, embed="axis") {
+   
+  list(title=paste0(embed, i), 
+       showticklabels = FALSE,
+       zeroline = FALSE,
+       showline = FALSE,
+       showgrid = FALSE)
 
 }

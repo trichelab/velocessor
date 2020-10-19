@@ -2,7 +2,7 @@
 % Please edit documentation in R/harmonize_velo_txis.R
 \name{harmonize_velo_txis}
 \alias{harmonize_velo_txis}
-\title{test harness for velocity correction, currently just runs on spliced}
+\title{harness for velocity correction (currently ignorant of spliced/unspliced)}
 \usage{
 harmonize_velo_txis(txis, colname = "sample", how = "default", ...)
 }

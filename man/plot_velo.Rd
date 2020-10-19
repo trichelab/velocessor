@@ -30,5 +30,7 @@ plot_velo(
 \description{
 The opacity of the cones is manipulated so that dot colors are visible.
 The provided SingleCellExperiment \code{txis} MUST have an element \code{scVelo} in
-its metadata, and it would be a good idea for
+its metadata, and that element (a SingleCellExperiment) needs to have a
+colData column "velocity_pseudotime" unless an argument 'colr' is provided.
+(Hence the references internally to "PSEUDOTIME" rather than "COLOR")
 }
