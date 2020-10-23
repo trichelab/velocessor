@@ -2,36 +2,49 @@
 
 [![Build Status](https://travis-ci.org/trichelab/velocessor.png?branch=master)](https://travis-ci.org/trichelab/velocessor)  [![codecov](https://codecov.io/gh/trichelab/velocessor/branch/master/graph/badge.svg)](https://codecov.io/gh/trichelab/velocessor)
 
-## How to finish setting up your new package
-
-Now that you've got a working package skeleton, there are a few steps to finish setting up all the integrations:
-
-### 1. Git(Hub)
-
-Go to https://github.com/trichelab and create a new repository. Then, in the directory where this package is, create your git repository from the command line, add the files, and push it to GitHub:
-
-    git init
-    git add --all
-    git commit -m "Initial commit of package skeleton"
-    git remote add origin git@github.com:trichelab/velocessor.git
-    git push -u origin master
-
-### 2. Travis
-
-Now you can go to [Travis](https://travis-ci.org/profile/trichelab) and turn on continuous integration for your new package. You may need to click the "Sync account" button to get your new package to show up in the list.
-
-If you have a codecov.io account, running your tests on Travis will trigger the code coverage job. No additional configuration is necessary
-
-## Installing
-
-<!-- If you're putting `velocessor` on CRAN, it can be installed with
-
-    install.packages("velocessor") -->
-
 The pre-release version of the package can be pulled from GitHub using the [devtools](https://github.com/hadley/devtools) package:
 
-    # install.packages("devtools")
-    devtools::install_github("trichelab/velocessor", build_vignettes=TRUE)
+    install.packages("BiocManager") # from CRAN
+    BiocManager::install("trichelab/velocessor")
+
+## Super quickstart
+
+### 0. Ram everything through Salmon/Alevin and tximeta
+
+See the [Alevin velocity tutorial](https://combine-lab.github.io/alevin-tutorial/2020/alevin-velocity/) for more details on this.
+
+### 1. Load annotations
+
+    library(AnnotationHub)
+    ah <- AnnotationHub()
+    # query(ah, c("ensdb", "Ensembl 99", "Homo sapiens") )
+    ens99 <- ah[["AH78783"]]
+    gencode33 <- genes(ens99, columns=c("symbol", "gene_biotype"))
+
+### 2. Load quantifications 
+
+    library(velocessor)
+    alevin_suffix <- "_alevin"
+    runs <- list.files(pattern=paste0(alevin_suffix, "$"))
+    names(runs) <- sub(alevin_suffix, "", runs)
+    qm <- "alevin/quants_mat.gz"
+    txstub <- "gencode.v33.annotation.withintrons.expanded"
+    txis <- process_velo_txis(runs, txstub, anno=gencode33, 
+                              HARMONY=TRUE, SCVELO=TRUE, 
+                              BPPARAM=MulticoreParam(3))
+
+### 3. Plot the results (optionally on rescaled axes)
+
+    txis <- rescale_dimred(txis, "UMAP") 
+    plot_velo(txis, embed="scaled_UMAP", sizeref=3)
+
+### 4. Explore the results
+
+    [Interactive plot colored by velocity pseudotime](https://trichelab.github.io/CHLA9_CHLA10_MSCs_pseudotime/)
+
+    Try zooming in and out with the middle mouse button, hovering, and rotating.
+
+
 
 ## For developers
 

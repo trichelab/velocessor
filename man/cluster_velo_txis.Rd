@@ -26,3 +26,11 @@ If a reduced dimension representation named "HARMONY" exists, the graph will
 be constructed on that, otherwise "PCA" will be used (or added if not found)
 unless use.dimred is explicitly specified by the user.
 }
+\details{
+It is not yet clear whether an approach like that taken in \code{Rphenoannoy}
+would allow for faster and therefore bootstrap-able clustering, and this is
+something that will be of interest going forwards. In some cases, using
+\code{rank} or \code{jaccard} distances with Louvain clustering produces overly fine-
+grained clusters, to the extent that something like SPADE may be needed to
+reconcile the results. Forthcoming releases will explore this.
+}
