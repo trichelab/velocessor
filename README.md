@@ -40,9 +40,9 @@ See the [Alevin velocity tutorial](https://combine-lab.github.io/alevin-tutorial
 
 ### 4. Explore the results
 
-    [Interactive plot colored by velocity pseudotime](https://trichelab.github.io/CHLA9_CHLA10_MSCs_pseudotime/)
+plot_velo generates an [interactive plot colored by velocity pseudotime](https://trichelab.github.io/CHLA9_CHLA10_MSCs_pseudotime/) by default (above) .
 
-    Try zooming in and out with the middle mouse button, hovering, and rotating.
+Try zooming in and out with the middle mouse button, hovering, and rotating.
 
 
 
