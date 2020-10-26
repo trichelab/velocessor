@@ -2,8 +2,8 @@ Package: velocessor
 Type: Package
 Title: The world's dumbest RNA velocity loader
 Description: Velocessor provides some convenience functions for RNA velocity loading, batch correction, and plotting in a Bioconductor environment. 
-Version: 0.1.23
-Date: 2020-10-22
+Version: 0.1.26
+Date: 2020-10-26
 Authors@R: person("Tim", "Triche, Jr.", role=c("aut", "cre"), email="trichelab@gmail.com")
 Author: Tim Triche, Jr. [aut, cre]
 Maintainer: Tim Triche, Jr. <trichelab@gmail.com>
@@ -19,6 +19,9 @@ Imports:
     MatrixGenerics,
     Polychrome,
     viridis,
+e   ensembldb,
+    AnnotationHub,
+    GenomicFeatures,
     SummarizedExperiment,
     scDblFinder,
     basilisk,
