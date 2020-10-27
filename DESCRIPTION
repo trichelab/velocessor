@@ -19,7 +19,7 @@ Imports:
     MatrixGenerics,
     Polychrome,
     viridis,
-e   ensembldb,
+    ensembldb,
     AnnotationHub,
     GenomicFeatures,
     SummarizedExperiment,
