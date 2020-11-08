@@ -2,29 +2,43 @@
 % Please edit documentation in R/cluster_velo_txis.R
 \name{cluster_velo_txis}
 \alias{cluster_velo_txis}
-\title{stupid-simple Louvain clustering. Doesn't currently care about unspliced.}
+\title{Simple Louvain, density, or k-means clustering. Doesn't use unspliced (yet).}
 \usage{
-cluster_velo_txis(txis, k = 20, type = "rank", use.dimred = NULL, ...)
+cluster_velo_txis(
+  txis,
+  k = 20,
+  type = "rank",
+  use = NULL,
+  how = c("louvain", "density", "mbkmeans"),
+  ret = c("clust", "sce"),
+  ...
+)
 }
 \arguments{
 \item{txis}{a SingleCellExperiment}
 
-\item{k}{number of nearest neighbors (20)}
+\item{k}{number of nearest neighbors, or clusters for mbkmeans (20)}
 
 \item{type}{what type of SNNGraph to construct ("rank")}
 
-\item{use.dimred}{which reducedDimension embedding to use (autodetermine)}
+\item{use}{which reducedDimension embedding to use (autodetermine)}
 
-\item{...}{optional arguments to pass to igraph::cluster_louvain()}
+\item{how}{cluster via "louvain" (default), "density", or "mbkmeans"?}
+
+\item{ret}{return "clust" assignments (default) or "sce"?}
+
+\item{...}{optional arguments to pass to clustering function(s)}
 }
 \value{
-\preformatted{       Louvain cluster assignments for each cell. 
+\preformatted{       Cluster labels (if ret=="clust") or a now-labeled "sce"
 }
 }
 \description{
 If a reduced dimension representation named "HARMONY" exists, the graph will
 be constructed on that, otherwise "PCA" will be used (or added if not found)
-unless use.dimred is explicitly specified by the user.
+unless use.dimred is explicitly specified by the user or "how" == "density".
+For mbkmeans, k is the number of clusters and "HARMONY" is used if found.
+For densityClust, the default representation to cluster upon is "UMAP".
 }
 \details{
 It is not yet clear whether an approach like that taken in \code{Rphenoannoy}
@@ -32,5 +46,37 @@ would allow for faster and therefore bootstrap-able clustering, and this is
 something that will be of interest going forwards. In some cases, using
 \code{rank} or \code{jaccard} distances with Louvain clustering produces overly fine-
 grained clusters, to the extent that something like SPADE may be needed to
-reconcile the results. Forthcoming releases will explore this.
+reconcile the results. The 'phenograph' algorithm is itself just Louvain
+clustering on 'jaccard' distance ("type"), something that 'rank' improves.
+
+The default number of PCAs or Harmony components "k" is set equal to that
+which Seurat uses by default, not for any particularly good reason. Note
+that \code{k} means something different (cluster number K) for minibatch K-means,
+but we leave the default the same (because YOLO, and you can always merge).
+(Which is to say, also not for any particularly good reason.)
+}
+\references{
+\
+Louvain clustering: \
+Blondel VD, Guillaume JL, Lambiotte R, Lefebvre E (2008). \
+Fast unfolding of communities in large networks. \
+Journal of Statistical Mechanics: Theory and Experiment. 2008 (10): P10008. \
+doi:10.1088/1742-5468/2008/10/P10008 \
+\
+Density clustering: \
+Rodriguez A, Laio A. (2014). \
+Clustering by fast search and find of density peaks. \
+Science, 344(6191), 1492-1496. \
+doi:10.1126/science.1242072 \
+\
+Minibatch K-means: \
+Sculley D. (2010). \
+Web-Scale K-Means Clustering. \
+WWW 2010, Raleigh, North Carolina, USA, ACM 978-1-60558-799-8/10/04. \
+https://doi.org/10.1145/1772690.1772862 \
+\
+Hicks SC, Liu R, Ni Y, Purdom E, Risso D. (2020). \
+mbkmeans: fast clustering for single cell data using mini-batch k-means. \
+bioRxiv 2020.05.27.119438 \
+doi: https://doi.org/10.1101/2020.05.27.119438
 }

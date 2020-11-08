@@ -14,6 +14,7 @@ process_velo_txis(
   CLUSTER = TRUE,
   DEDUPE = FALSE,
   SCVELO = FALSE,
+  meta = FALSE,
   ...,
   BPPARAM = SerialParam()
 )
@@ -37,6 +38,8 @@ process_velo_txis(
 
 \item{SCVELO}{run scVelo on the (perhaps harmonized) result? (FALSE, slow)}
 
+\item{meta}{use tximeta for import_velo_txis? (FALSE; avoid bfc issues)}
+
 \item{...}{other arguments to pass to velociraptor::scvelo, if any}
 
 \item{BPPARAM}{if running in parallel, provide a MulticoreParam or similar}
@@ -46,25 +49,17 @@ process_velo_txis(
 }
 }
 \description{
-The default assay (which is then split into spliced and unspliced matrices)
-is rescaled TPM, which is to say, abundance in transcripts per million,
-scaled by the number of fragments/transcripts observed in each cell.
+This is evolving rapidly to handle microwell-seq and plate-seq data.
 }
 \details{
-We have found when comparing single-cell protocols against bulk and against
-each other that this allows for both correction of sampling bias, and also
-the use of count-like representations instead of purely proportional TPMs.
-If you don't have a good reason to pass something other than 'abundance' in
-the optional arguments to 'asy', we would suggest leaving it as is.
-
 The results of this function can be further QC'ed and/or batch corrected,
 for example with Harmony or sva::ComBat, then passed to velociraptor::scvelo
-and cellrank::cellrank for data-driven trajectory/cell-fate inference. We
-are investigating whether a factorization approach may allow for sensible
+and/or velocessor::cellrank for data-driven cell fate inference. We are
+investigating various factorization approaches that may allow for sensible
 batch effect correction while respecting the relationships between spliced
-and unspliced transcript abundance, but have not yet finalized it.
+and unspliced transcript abundance, but have not yet settled on a default.
 
-See also plotVelocity for a relatively straightforward exploratory plot
-based on UMAP coordinates and a downsampled subset of cells from the
-SingleCellExperiment this function and velociraptor::scvelo yields.
+See also plot_velo for a relatively straightforward exploratory plot
+based on UMAP coordinates and the downsampled subset of cells from the
+SingleCellExperiment that this function and velociraptor::scvelo yields.
 }

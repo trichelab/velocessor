@@ -9,12 +9,12 @@ drop_doublets(txis, ...)
 \arguments{
 \item{txis}{a SingleCellExperiment}
 
-\item{...}{other arguments, currently unused}
+\item{...}{more params for scDblFinder, e.g. \code{trajectoryMode} or \code{BPPARAM}}
 }
 \value{
 \preformatted{ if successful, a SingleCellExperiment with doublets dropped
 }
 }
 \description{
-simple automated doublet marking for pipelining
+Note: if colLabels(txis) exists, it will be used to supply cluster labels.
 }
