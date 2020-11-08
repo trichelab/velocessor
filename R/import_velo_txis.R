@@ -55,8 +55,8 @@ import_velo_txis <- function(cdat, quant=c("alevin"), meta=FALSE, QC=TRUE, sep="
   
     message("meta==FALSE; working directly from Alevin counts and GTF file...")
     asys <- list(counts=.readFish(alevin))
-    rr <- .rowRangesFromGtf(gtf)[rownames(counts)]
-    cd <- DataFrame(attr(counts, "stats"))[colnames(counts),]
+    rr <- .rowRangesFromGtf(gtf)[rownames(asys$counts)]
+    cd <- DataFrame(attr(counts, "stats"))[colnames(asys$counts),]
     txi <- SingleCellExperiment(asys, rowRanges=rr, colData=cd)
 
   } 
