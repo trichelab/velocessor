@@ -31,10 +31,11 @@ import_velo_txis <- function(cdat, quant=c("alevin"), meta=FALSE, QC=TRUE, sep="
   stopifnot(length(cdat[['names']]) == 1)
   stopifnot(all(c("names", "files") %in% names(cdat)))
 
-  root <- cdat[['names']]
+  root <- strsplit(cdat[['files']], "/")[[1]][1]
   alevin <- file.path(root, "alevin")
-  index <- fromJSON(file.path(root, "cmd_info.json"))$index
+  index <- jsonlite::fromJSON(file.path(root, "cmd_info.json"))$index
 
+  txome <- cdat[['txome']]
   gtf <- jsonlite::fromJSON(txome)[1, "gtf"]
   stopifnot(file.exists(gtf)) # so tximeta doesn't puke
 
