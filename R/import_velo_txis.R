@@ -95,14 +95,14 @@ import_velo_txis <- function(cdat, quant=c("alevin"), meta=FALSE, QC=TRUE, sep="
 
 
 # helper fn
-.readFish <- function(alevin, tier=TRUE) { 
+.readFish <- function(alevin) { 
  
   cells <- read.table(file.path(alevin, "quants_mat_rows.txt"))[,1]
   ncells <- length(cells)
   genes <- read.table(file.path(alevin, "quants_mat_cols.txt"))[,1]
   ngenes <- length(genes)
-  qm <- file.path(alevin, ifelse(tier, "quants_tier_mat.gz", "quants_mat.gz"))
-  counts <- fishpond::readEDS(ngenes, ncells, qm, tierImport=tier)
+  qm <- file.path(alevin, "quants_mat.gz")
+  counts <- fishpond::readEDS(ngenes, ncells, qm)
   stats <- read.table(file.path(alevin, "featureDump.txt"), head=TRUE, row=1)
   attr(counts, "stats") <- stats
   rownames(counts) <- genes
