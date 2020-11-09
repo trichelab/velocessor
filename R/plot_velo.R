@@ -37,7 +37,7 @@ plot_velo <- function(txis, embed="UMAP", replace=FALSE, colr="velocity_pseudoti
   if ("embedded" %in% names(metadata(txis)) & !replace) { 
     embedded <- metadata(txis)$embedded
   } else {
-    embedded <- velociraptor::embedVelocity(reducedDim(txis, embed), 
+    embedded <- velociraptor::embedVelocity(reducedDims(txis)[[embed]], 
                                             metadata(txis)$scVelo)
   }
 
