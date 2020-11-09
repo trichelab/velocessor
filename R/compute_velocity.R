@@ -35,9 +35,9 @@ compute_velocity <- function(txis, mode="stochastic", ...) {
   message("Embedding velocity onto UMAP coordinates...")
   if (!"UMAP" %in% reducedDimNames(txis)) { 
     if ("HARMONY" %in% reducedDimNames(txis)) {
-      txis <- runUMAP(txis, ncomponents=3, name="HARMONY")
+      txis <- scater::runUMAP(txis, ncomponents=3, dimred="HARMONY")
     } else { 
-      txis <- runUMAP(txis, ncomponents=3)
+      txis <- scater::runUMAP(txis, ncomponents=3)
     } 
   }
   embedded <- embedVelocity(reducedDims(txis)$UMAP, metadata(txis)$scVelo)
