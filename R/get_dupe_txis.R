@@ -29,8 +29,9 @@ get_dupe_txis <- function(txis, mincount=1, mincells=1) {
     message("No duplicated symbols found.")
     syms <- ensg <- idxs <- cuts <- cells <- empty
   } else { 
-    syms <- sort(mcols(txis)$symbol[which(duplicated(mcols(txis)$symbol))])
-    ensg <- subset(rownames(txis), mcols(txis)$symbol %in% syms)
+    duped <- sort(mcols(txis)$symbol[which(duplicated(mcols(txis)$symbol))])
+    ensg <- subset(rownames(txis), mcols(txis)$symbol %in% duped)
+    syms <- mcols(txis)[ensg, "symbol"]
     idxs <- match(ensg, rownames(txis))
     cuts <- rep(mincount, length(idxs))
     cells <- apply(counts(txis)[idxs,], 1, function(x) sum(x > mincount))

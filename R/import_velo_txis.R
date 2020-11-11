@@ -20,7 +20,6 @@
 #' @import tximeta
 #' @import jsonlite
 #' @import fishpond
-#' @import rtracklayer
 #' @import MatrixGenerics
 #' @import SingleCellExperiment
 #' 
