@@ -57,7 +57,7 @@ process_velo_txis <- function(runs, txstub, qm="alevin/quants_mat.gz", QC=TRUE, 
   stopifnot(file.exists(gtf))
   
   # sanity checking prior to processing  
-  feats <- paste(txstub, "features", "tsv", sep=".")
+  feats <- sub("\\.gtf", ".features.tsv", gtf)
   stopifnot(file.exists(feats))
 
   # this can feed either 

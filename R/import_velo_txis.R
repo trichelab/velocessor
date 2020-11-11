@@ -39,8 +39,7 @@ import_velo_txis <- function(cdat, quant=c("alevin"), meta=FALSE, QC=TRUE, sep="
   gtf <- jsonlite::fromJSON(txome)[1, "gtf"]
   stopifnot(file.exists(gtf)) # so tximeta doesn't puke
 
-  txstub <- sub("\\.sidx$", "", index)
-  feats <- paste(txstub, "features", "tsv", sep=".")
+  feats <- sub("\\.gtf", ".features.tsv", gtf)
   stopifnot(file.exists(feats))
 
   message("Processing ", cdat[['names']], "...")
