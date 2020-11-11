@@ -24,7 +24,8 @@ compute_velocity <- function(txis, mode="stochastic", ...) {
 
   message("Adding velocity...") 
   metadata(txis)$scVelo <- 
-    scvelo(txis, subset.row=HVGs, assay.X="spliced", mode=mode, ...) 
+    velociraptor::scvelo(txis, subset.row=HVGs, assay.X="spliced", 
+                         mode=mode, ...) 
 
   message("Adding velocity_pseudotime...")
   txis$velocity_pseudotime <- metadata(txis)$scVelo$velocity_pseudotime
@@ -33,14 +34,16 @@ compute_velocity <- function(txis, mode="stochastic", ...) {
   if (mode == "dynamical") txis$latent_time <- metadata(txis)$scVelo$latent_time
     
   message("Embedding velocity onto UMAP coordinates...")
-  if (!"UMAP" %in% reducedDimNames(txis)) { 
+  if (!"UMAP" %in% reducedDimNames(txis) | 
+      ncol(reducedDims(txis)[["UMAP"]]) < 3) { 
     if ("HARMONY" %in% reducedDimNames(txis)) {
       txis <- scater::runUMAP(txis, ncomponents=3, dimred="HARMONY")
     } else { 
       txis <- scater::runUMAP(txis, ncomponents=3)
     } 
-  }
-  embedded <- embedVelocity(reducedDims(txis)$UMAP, metadata(txis)$scVelo)
+  } 
+  embedded <- 
+    velociraptor::embedVelocity(reducedDims(txis)$UMAP, metadata(txis)$scVelo)
   metadata(txis)$embedded <- embedded
 
   message("Added scVelo (", mode, " mode) output to metadata(txis)$scVelo")

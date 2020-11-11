@@ -19,7 +19,7 @@ plot_velo(
 
 \item{replace}{replace any existing metadata element \code{embedded}? (FALSE)}
 
-\item{colr}{column to use for colors (else just velocity_pseudotime)}
+\item{colr}{column(s) to use for colors (default: velocity_pseudotime)}
 
 \item{...}{optional arguments to pass to plotly::plot_ly()}
 }
@@ -32,5 +32,5 @@ The opacity of the cones is manipulated so that dot colors are visible.
 The provided SingleCellExperiment \code{txis} MUST have an element \code{scVelo} in
 its metadata, and that element (a SingleCellExperiment) needs to have a
 colData column "velocity_pseudotime" unless an argument 'colr' is provided.
-(Hence the references internally to "PSEUDOTIME" rather than "COLOR")
+(Hence the references internally to "COLORING" rather than "COLOR")
 }

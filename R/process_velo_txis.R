@@ -16,7 +16,6 @@
 #' @param runs    a named vector of paths (if unnamed, you'll have problems)
 #' @param txstub  the shared portion of the transcriptome annotation files 
 #' @param qm      the name and path of the Alevin quants matrix file in 'runs' 
-#' @param anno    optional GRanges linking e.g. ENSG transcripts to HGNC symbols
 #' @param QC      do rudimentary quality control on each Alevin dataset? (TRUE)
 #' @param HARMONY run Harmony on merged dataset? (FALSE, as harmony is non-BioC)
 #' @param CLUSTER apply simple Louvain clustering to the result? (TRUE) 
@@ -38,17 +37,24 @@
 #' @import BiocParallel 
 #' 
 #' @export
-process_velo_txis <- function(runs, txstub, anno=NULL, qm="alevin/quants_mat.gz", QC=TRUE, HARMONY=FALSE, CLUSTER=TRUE, DEDUPE=FALSE, SCVELO=FALSE, meta=FALSE, ..., BPPARAM=SerialParam()) {
+process_velo_txis <- function(runs, txstub, qm="alevin/quants_mat.gz", QC=TRUE, HARMONY=FALSE, CLUSTER=TRUE, DEDUPE=FALSE, SCVELO=FALSE, meta=FALSE, ..., BPPARAM=SerialParam()) {
 
+  # sanity checking prior to processing  
   stopifnot(!is.null(names(runs)))
  
   txome <- paste(txstub, "json", sep=".")
   stopifnot(file.exists(txome))
   tximeta::loadLinkedTxome(jsonFile=txome)
-
-  # sanity checking prior to processing  
-  gtf <- jsonlite::fromJSON(txome)[1, "gtf"]
-  stopifnot(file.exists(gtf)) # so tximeta doesn't puke
+  txjson <- jsonlite::fromJSON(txome)
+  if (tolower(txjson[["source"]]) == "gencode") {
+    anno <- get_gencode_genes(release=txjson[["release"]])
+  } else { 
+    anno <- get_ensembl_genes(version=txjson[["release"]],
+                              species=txjson[["organism"]])
+  }
+    
+  gtf <- txjson[1, "gtf"]
+  stopifnot(file.exists(gtf))
   
   # sanity checking prior to processing  
   feats <- paste(txstub, "features", "tsv", sep=".")

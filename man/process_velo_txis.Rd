@@ -7,7 +7,6 @@
 process_velo_txis(
   runs,
   txstub,
-  anno = NULL,
   qm = "alevin/quants_mat.gz",
   QC = TRUE,
   HARMONY = FALSE,
@@ -23,8 +22,6 @@ process_velo_txis(
 \item{runs}{a named vector of paths (if unnamed, you'll have problems)}
 
 \item{txstub}{the shared portion of the transcriptome annotation files}
-
-\item{anno}{optional GRanges linking e.g. ENSG transcripts to HGNC symbols}
 
 \item{qm}{the name and path of the Alevin quants matrix file in 'runs'}
 

@@ -3,7 +3,7 @@ Type: Package
 Title: The world's dumbest RNA velocity loader
 Description: Velocessor provides some convenience functions for RNA velocity loading, batch correction, and plotting in a Bioconductor environment. 
 Version: 0.11.11
-Date: 2020-11-08
+Date: 2020-11-11
 Authors@R: person("Tim", "Triche, Jr.", role=c("aut", "cre"), email="trichelab@gmail.com")
 Author: Tim Triche, Jr. [aut, cre]
 Maintainer: Tim Triche, Jr. <trichelab@gmail.com>
@@ -33,7 +33,6 @@ Imports:
     jsonlite,
     plotly,
     scater,
-    fields,
     scran,
     scuttle,
     velociraptor,
@@ -43,7 +42,8 @@ Suggests:
     covr,
     testthat,
     Rphenoannoy,
-    harmony
+    harmony,
+    symphony
 Encoding: UTF-8
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
