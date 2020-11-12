@@ -11,7 +11,6 @@
 #'   get_gencode_transcripts("m24")
 #'   get_gencode_genes("gencode33")
 #' 
-#' @import ensembldb
 #' @import AnnotationHub
 #' @import GenomicFeatures
 #'

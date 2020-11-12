@@ -5,7 +5,7 @@
 #' 
 #' @return          a GRanges of genes with symbols and biotypes
 #' 
-#' @import ensembldb
+#' @importFrom ensembldb genes
 #' 
 #' @export 
 get_ensembl_genes <- function(version, species="Homo sapiens") { 

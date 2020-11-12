@@ -5,7 +5,8 @@
 #' 
 #' @return            a GRangesList of transcripts grouped by gene
 #' 
-#' @import  ensembldb
+#' @importFrom ensembldb transcripts
+#' @importFrom ensembldb transcriptsBy
 #' 
 #' @export 
 get_ensembl_transcripts <- function(version, species="Homo sapiens") { 
