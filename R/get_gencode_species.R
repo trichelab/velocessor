@@ -7,7 +7,7 @@
 #' @export
 get_gencode_species <- function(release) { 
 
-  release <- sub("^VM", "M", ignore=TRUE, release) 
+  release <- fix_gencode(release) 
   ifelse(toupper(substr(release, 1, 1)) == "M", "Mus musculus", "Homo sapiens")
 
 }

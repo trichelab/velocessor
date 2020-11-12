@@ -14,5 +14,9 @@ get_gencode_ensembl(release)
 }
 }
 \description{
-Gencode releases do not map 1:1 onto ENSEMBL releases, hence this function.
+We don't even try to be complete because it's a mess before gencode 19.
+This ought to use a table in system.file("data", package="velocessor").
+}
+\seealso{
+fix_gencode
 }

@@ -4,10 +4,14 @@
 \alias{dedupe_velo_txis}
 \title{deduplicate symbols in a SingleCellExperiment object with multiple assays}
 \usage{
-dedupe_velo_txis(txis)
+dedupe_velo_txis(txis, mincount = 1, mincells = 1)
 }
 \arguments{
 \item{txis}{a SingleCellExperiment}
+
+\item{mincount}{minimum count to register as nonzero (1)}
+
+\item{mincells}{how many cells must have at least mincount to retain? (1)}
 }
 \value{
 \preformatted{       txis, but with duplicate representations of symbols summed
@@ -16,4 +20,7 @@ dedupe_velo_txis(txis)
 \description{
 rowData(txis) \emph{must} have columns 'symbol' and 'gene_id' for this to work.
 Perhaps not coincidentally, this is what ensembldb returns for a given build.
+To avoid potentially pointless calculations, this function first drops all
+completely-zero ENS\link{MUS}G rows, then calls velocessor::find_dupe_txis, and
+only works on the surviving dupes (if any).
 }

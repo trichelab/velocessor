@@ -20,7 +20,7 @@
 #' @import Matrix
 #' 
 #' @export 
-get_dupe_txis <- function(txis, mincount=1, mincells=1) {
+find_dupe_txis <- function(txis, mincount=1, mincells=1) {
 
   empty <- rep(NA, 0) 
   if (!all(c("symbol","gene_id") %in% names(mcols(txis)))) {

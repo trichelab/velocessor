@@ -4,30 +4,26 @@
 \alias{fetch_ensembl}
 \alias{get_ensembl_transcripts}
 \alias{get_ensembl_genes}
-\title{convenience functions for fetching ENSEMBL/Gencode annotations (genes & txs)}
+\title{convenience function for fetching ENSEMBL annotations (genes & txs)}
 \usage{
 fetch_ensembl(version, species)
 }
 \arguments{
-\item{version}{the ENSEMBL (preferred) or Gencode (as gencodeXYZ) version}
+\item{version}{the ENSEMBL version}
 
-\item{species}{the species to fetch (default is "Homo sapiens")}
+\item{species}{the ENSEMBL species ("Homo sapiens")}
 }
 \value{
-\preformatted{     ensdb object (fetch_ensembl) or GRanges[List] of genes/[txs]
+\preformatted{     an ensdb object
 }
 }
 \description{
-Gencode genes are based on ENSEMBL builds. When AnnotationHub's version of
-Gencode lags behind current (as often happens), it is possible to retrieve
-ENSEMBL builds instead. For example, Gencode 33 is ENSEMBL 99; GENCODE 35 is
-ENSEMBL 101; and so forth. Moreover, given an ENSEMBL build and a species,
-a minimum subset of information (gene id, gene name, gene biotype) is easily
-retrieved for annotation purposes. So by default we just grab ENSEMBL genes.
+convenience function for fetching ENSEMBL annotations (genes & txs)
 }
 \examples{
   fetch_ensembl("101", "Homo sapiens")
   get_ensembl_transcripts("101", "Mus musculus")
-  get_ensembl_genes("gencode33")
+  get_gencode_transcripts("m24")
+  get_gencode_genes("gencode33")
 
 }

@@ -1,8 +1,13 @@
 #' Gencode releases do not map 1:1 onto ENSEMBL releases, hence this function.
 #'
+#' We don't even try to be complete because it's a mess before gencode 19. 
+#' This ought to use a table in system.file("data", package="velocessor").
+#' 
 #' @param release   the Gencode release (e.g. M24 or 30) 
 #'
 #' @return          the ENSEMBL version (e.g. 99 or 96)
+#' 
+#' @seealso fix_gencode
 #' 
 #' @export
 get_gencode_ensembl <- function(release) { 
@@ -30,7 +35,6 @@ get_gencode_ensembl <- function(release) {
            "34"=100, "M25"=100,
            "35"=101            )
 
-  
-  ens[sub("^VM", "M", ignore=TRUE, release)]
+  return(ens[fix_gencode(release)])
 
 }
