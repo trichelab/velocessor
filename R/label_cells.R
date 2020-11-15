@@ -13,7 +13,6 @@
 #' @return depending on the value of 'ret', either an SCE or a set of labels
 #' 
 #' @import SingleR 
-#' @import celldex
 #'
 #' @export
 label_cells <- function(txis, species=c("Homo sapiens", "Mus musculus"), ret=c("sce", "labels"), downsample=NULL, maxcells=50, ...) {
