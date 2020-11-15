@@ -6,7 +6,7 @@
 \usage{
 label_cells(
   txis,
-  species = c("Homo sapiens", "Mus musculus"),
+  species = NULL,
   ret = c("sce", "labels"),
   downsample = NULL,
   maxcells = 50,
@@ -16,7 +16,7 @@ label_cells(
 \arguments{
 \item{txis}{a SingleCellExperiment}
 
-\item{species}{what species is this from? ("Homo sapiens" -- automate?)}
+\item{species}{what species is this from? (autodetect Hs/Mm)}
 
 \item{ret}{what kind of object to return}
 
@@ -32,4 +32,8 @@ depending on the value of 'ret', either an SCE or a set of labels
 \description{
 Uses singleR to label celltypes. More sophisticated users may want to work
 directly with SingleR input and output for (e.g.) specific gene sets.
+}
+\details{
+Autodetection of species will fail if the genome for the SingleCellExperiment
+does not contain "GRCm", "mm", "GRCh", or "hg".
 }
