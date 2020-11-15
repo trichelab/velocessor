@@ -18,6 +18,8 @@
 #' @export
 label_cells <- function(txis, species=c("Homo sapiens", "Mus musculus"), ret=c("sce", "labels"), downsample=NULL, maxcells=50, ...) {
 
+  stopifnot(is(txis, "SingleCellExperiment"))
+
   ret <- match.arg(ret)
   species <- match.arg(species) 
   training <- switch(species, 
@@ -35,18 +37,16 @@ label_cells <- function(txis, species=c("Homo sapiens", "Mus musculus"), ret=c("
   }
 
   # now label -- note that this is a ham-fisted default 
-  pred <- SingleR(txis[cols,], ref, labels=ref$label, ...)$pruned.labels
+  pred <- SingleR(txis[rows, cols], ref, labels=ref$label, ...)$pruned.labels
 
   # accommodate downsampling
-  sampled <- colnames(txis) %in% cols
-  names(sampled) <- colnames(txis)
-  colData(txis)[, "celltype.sampled"] <- sampled
+  colData(txis)[, "celltype.sampled"] <- colnames(txis) %in% cols
 
   label <- rep(NA, ncol(txis))
   names(label) <- colnames(txis)
   label[cols] <- pred[cols]
 
-  colData(txis)[, "celltype.label"] <- celltype
+  colData(txis)[, "celltype.label"] <- label
   return(switch(ret,
                 sce=txis, 
                 labels=txis$celltype.label))
