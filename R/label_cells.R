@@ -27,8 +27,8 @@ label_cells <- function(txis, species=NULL, ret=c("sce", "labels"), downsample=N
       species <- "Homo sapiens"
     } else if (grepl("^(GRCm|mm)", unique(genome(txis)))) {
       species <- "Mus musculus"
-    } else if (grepl("^(GRCz|dr)", unique(genome(txis)))) {
-      species <- "Danio rerio"
+#    } else if (grepl("^(GRCz|dr)", unique(genome(txis)))) {
+#      species <- "Danio rerio"
     } else { 
       stop("Cannot automatically determine species to label cells. Exiting.") 
     } 
@@ -42,7 +42,6 @@ label_cells <- function(txis, species=NULL, ret=c("sce", "labels"), downsample=N
   }
 
   ret <- match.arg(ret)
-  species <- match.arg(species) 
   training <- switch(species, 
                      "Homo sapiens"=celldex::HumanPrimaryCellAtlasData(), 
                      "Mus musculus"=celldex::ImmGenData())
