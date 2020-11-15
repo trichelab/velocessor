@@ -25,7 +25,7 @@ label_cells <- function(txis, species=c("Homo sapiens", "Mus musculus"), ret=c("
                      "Homo sapiens"=celldex::HumanPrimaryCellAtlasData(), 
                      "Mus musculus"=celldex::ImmGenData())
   rows <- intersect(rownames(txis), rownames(training))
-  trained <- trainSingleR(training[rows,], training$label.main)
+  ref <- trainSingleR(training[rows,], training$label.main)
 
   # downsample?
   cols <- colnames(txis)
