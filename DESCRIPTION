@@ -2,8 +2,8 @@ Package: velocessor
 Type: Package
 Title: The world's dumbest RNA velocity loader
 Description: Velocessor provides some convenience functions for RNA velocity loading, batch correction, and plotting in a Bioconductor environment. 
-Version: 0.11.12
-Date: 2020-11-12
+Version: 0.11.15
+Date: 2020-11-15
 Authors@R: person("Tim", "Triche, Jr.", role=c("aut", "cre"), email="trichelab@gmail.com")
 Author: Tim Triche, Jr. [aut, cre]
 Maintainer: Tim Triche, Jr. <trichelab@gmail.com>
@@ -24,10 +24,10 @@ Imports:
     AnnotationHub,
     GenomicFeatures,
     SummarizedExperiment,
-    compartmap (>= 1.7.1),
     scDblFinder,
     basilisk,
     eisaR,
+    mclust,
     fishpond,
     igraph,
     jsonlite,
@@ -36,14 +36,15 @@ Imports:
     scran,
     scuttle,
     velociraptor,
-    mbkmeans,
+    SingleR,
     tximeta
 Suggests:
     covr,
     testthat,
-    Rphenoannoy,
+    compartmap (>= 1.7.1),
     harmony,
-    symphony
+    symphony,
+    mbkmeans
 Encoding: UTF-8
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)

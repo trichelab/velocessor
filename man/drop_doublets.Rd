@@ -4,10 +4,12 @@
 \alias{drop_doublets}
 \title{simple automated doublet marking for pipelining}
 \usage{
-drop_doublets(txis, ...)
+drop_doublets(txis, score = "weighted", ...)
 }
 \arguments{
 \item{txis}{a SingleCellExperiment}
+
+\item{score}{scoring method (default is "weighted", use "xgb" if you can)}
 
 \item{...}{more params for scDblFinder, e.g. \code{trajectoryMode} or \code{BPPARAM}}
 }
@@ -17,4 +19,5 @@ drop_doublets(txis, ...)
 }
 \description{
 Note: if colLabels(txis) exists, it will be used to supply cluster labels.
+Note: we skip the xgboost option in favor of "weighted" for HPC usage.
 }

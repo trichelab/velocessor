@@ -2,19 +2,41 @@
 % Please edit documentation in R/sample_clusters.R
 \name{sample_clusters}
 \alias{sample_clusters}
-\title{downsample by clusters for NMF/NTF exploration}
+\title{simple downsampling for NMF/NTF exploratory work and big datasets}
 \usage{
 sample_clusters(txis, n = 100)
 }
 \arguments{
-\item{txis}{a SingleCellExperiment with $cluster set}
+\item{txis}{a SingleCellExperiment with cluster assignments in colLabels}
 
-\item{n}{how many cells per cluster (default is 100)}
+\item{n}{how many cells per cluster to sample at most? (500)}
+
+\item{batch}{batch term (will use $sample if none)}
+
+\item{block}{block term (will omit if none)}
+
+\item{...}{additional arguments to scuttle::downsampleBatches if using}
 }
 \value{
-\preformatted{ a downsampled SingleCellExperiment
+\preformatted{   a downsampled SingleCellExperiment
 }
 }
 \description{
-downsample by clusters for NMF/NTF exploration
+Hint: if it doesn't work, you might have too many clusters. Try different
+options to cluster_velo_txis until you get a tranctable representation. Feel
+free to plot the various representations and/or look at silhouette plots,
+modularity, whatever until you feel comfortable that the clusters don't suck.
+}
+\details{
+And remember: Clustering Is Difficult Only When It Does Not Matter (ref 1).
+}
+\references{
+\
+Daniely A, Linial N, Saks M. (2012) \
+Clustering is difficult only when it does not matter. \
+https://arxiv.org/abs/1205.4891
+}
+\seealso{
+\preformatted{  scuttle::downsampleBatches
+}
 }
