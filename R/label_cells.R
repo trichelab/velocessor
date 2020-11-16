@@ -55,7 +55,7 @@ label_cells <- function(txis, species=NULL, ret=c("sce", "labels"), downsample=N
                 "Mus musculus"=celldex::ImmGenData())
   stopifnot(label %in% names(colData(ref)))
   labelings <- colData(ref)[, label]
-  if (byClust) clusters <- colLabels(txis)[cols] 
+  if (byClust) clusters <- factor(colLabels(txis)[cols]) 
   rows <- intersect(rownames(txis), rownames(ref))
   pred <- SingleR(txis[rows, cols], ref[rows,], labels=labelings, 
                   clusters=clusters, ...)$pruned.labels
