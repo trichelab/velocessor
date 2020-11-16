@@ -9,10 +9,9 @@ label_cells(
   species = NULL,
   ret = c("sce", "labels"),
   downsample = NULL,
-  maxcells = 20,
+  maxcells = 10,
   mincells = 10,
   label = c("label.main", "label.fine"),
-  byClust = FALSE,
   ...
 )
 }
@@ -25,15 +24,13 @@ label_cells(
 
 \item{downsample}{downsample? (if ncol(txis) > 20000, TRUE, else FALSE)}
 
-\item{maxcells}{maximum number of cells per cluster per sample (20)}
+\item{maxcells}{maximum number of cells \emph{per_sample} per cluster (20)}
 
 \item{mincells}{minimum number of cells per cluster (10)}
 
 \item{label}{which label to use ("label.main")}
 
 \item{...}{other arguments passed to SingleR}
-
-\item{byclust}{label cells by cluster? (FALSE, label individually)}
 }
 \value{
 depending on the value of 'ret', either an SCE or a set of labels
@@ -46,4 +43,10 @@ directly with SingleR input and output for (e.g.) specific gene sets.
 Autodetection of species will fail if the genome for the SingleCellExperiment
 does not contain "GRCm", "mm", "GRCh", or "hg". Once reasonable reference
 datasets are available for GRCz/dr genomes, we will support those too.
+
+Twenty cells per sample per cluster may be an awful lot of cells if you have
+a large number of samples (i.e. GEMcode preps). Setting \code{maxcells} as low as
+10, or perhaps even lower (see upcoming cluster-by-sample plots), if the
+cells comprising a cluster come from across many samples. The quick way to
+find this out is with a plot,
 }

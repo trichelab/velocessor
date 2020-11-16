@@ -4,12 +4,12 @@
 \alias{downsample_txis}
 \title{blockwise downsampling: try to preserve balanced clusters across samples}
 \usage{
-downsample_txis(txis, maxcells = 50, mincells = 10, ...)
+downsample_txis(txis, maxcells = 20, mincells = 10, ...)
 }
 \arguments{
 \item{txis}{SingleCellExperiment where !is.null(colLabels(txis))}
 
-\item{maxcells}{max cells per cluster per sample (see Details) (50)}
+\item{maxcells}{max cells per cluster per sample (see Details) (20)}
 
 \item{mincells}{min cells per cluster per sample (see Details) (10)}
 
@@ -41,4 +41,9 @@ post-filtering (i.e., subject to \code{mincells} and per-cluster mixture fits).
 The mixture fits assume that a two-component mixture model on either
 log(1+cells) or directly on cell number per cluster will remove "noise"
 elements. This may be false; the user will have to investigate if so.
+}
+\seealso{
+find_eligible_cells
+
+label_cells
 }
