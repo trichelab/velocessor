@@ -41,7 +41,6 @@ label_cells <- function(txis, species=NULL, ret=c("sce", "labels"), downsample=N
   ret <- match.arg(ret)
   cols <- colnames(txis)
   label <- match.arg(label) 
-  stopifnot(label %in% names(colData(ref)))
   if (is.null(downsample)) downsample <- (ncol(txis) > 20000)
   if (downsample == TRUE) {
     message("Downsampling prior to cell labeling. Some labels will be NA.")
@@ -54,6 +53,7 @@ label_cells <- function(txis, species=NULL, ret=c("sce", "labels"), downsample=N
   ref <- switch(species, 
                 "Homo sapiens"=celldex::HumanPrimaryCellAtlasData(), 
                 "Mus musculus"=celldex::ImmGenData())
+  stopifnot(label %in% names(colData(ref)))
   labelings <- colData(ref)[, label]
   if (byClust) clusters <- colLabels(txis)[cols] 
   rows <- intersect(rownames(txis), rownames(ref))
