@@ -64,7 +64,7 @@ downsample_txis <- function(txis, maxcells=50, mincells=10, ...) {
   }
 
   # return a named vector of sampled colnames
-  res <- .nv(do.call(c, lapply(sat, .getcells)))
+  res <- .nv(do.call(c, lapply(sat, .getcells, maxcells=maxcells)))
   scheme <- list(mincells=mincells, 
                  maxcells=maxcells, 
                  eligible=eligible)
