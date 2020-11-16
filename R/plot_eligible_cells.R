@@ -11,7 +11,7 @@
 #' @seealso label_cells
 #' @seealso downsample_txis
 #' 
-#' @import ComplexHeatmap
+#' @importFrom ComplexHeatmap Heatmap
 #' 
 #' @export
 plot_eligible_cells <- function(txis, mincells=10, logcells=FALSE, ...) { 
