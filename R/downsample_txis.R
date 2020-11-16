@@ -20,18 +20,19 @@
 #' of cells in each cluster, and exclude samples with few or no cells in that 
 #' cluster from block sampling. Don't use this on SmartSeq-type data.
 #' 
-#' Note that attr(sample_by_cluster_and_source(txis), "scheme") is a list with 
-#' elements 'mincells', 'maxcells', and 'eligible'. 'mincells' and 'maxcells'
-#' are integers, while 'eligible' is an integer matrix with counts of cells 
+#' Note that attr(downsample_txis(txis), "scheme") is a list with elements 
+#' 'mincells', 'maxcells', and 'eligible'. 'mincells' and 'maxcells' are 
+#' integers, while 'eligible' is an integer matrix with counts of cells 
 #' post-filtering (i.e., subject to `mincells` and per-cluster mixture fits). 
+#'
 #' The mixture fits assume that a two-component mixture model on either 
 #' log(1+cells) or directly on cell number per cluster will remove "noise" 
-#' elements. This may be false; the user will have to investigate, if so. 
+#' elements. This may be false; the user will have to investigate if so. 
 #' 
 #' @import mclust
 #' 
 #' @export
-sample_by_cluster_and_source <- function(txis, maxcells=50, mincells=10, ...) {
+downsample_txis <- function(txis, maxcells=50, mincells=10, ...) {
 
   if (length(colLabels(txis)) < ncol(txis)) stop("colLabels() is empty!")
   if (is.null(txis$sample)) stop("txis$sample is NULL!")
@@ -132,8 +133,8 @@ sample_by_cluster_and_source <- function(txis, maxcells=50, mincells=10, ...) {
 .fit_mixtures <- function(cells) { 
 
   logcells <- log1p(cells)
-  cellfits <- apply(cells, 1, densityMclust, G=1:2)
-  logcellfits <- apply(logcells, 1, densityMclust, G=1:2)
+  cellfits <- apply(cells, 1, densityMclust, G=1:2, verbose=FALSE)
+  logcellfits <- apply(logcells, 1, densityMclust, G=1:2, verbose=FALSE)
 
   modelnames <- .nv(c("cells", "logcells"))
   comps <- data.frame(cells=unname(sapply(cellfits, `[[`, "G")),
