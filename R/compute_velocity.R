@@ -41,12 +41,12 @@ compute_velocity <- function(txis, scvmode="stochastic", ...) {
                                                 ...) 
 
   message("Adding velocity_pseudotime...")
-  txis$velocity_pseudotime <- scVelo$velocity_pseudotime
+  txis$velocity_pseudotime <- metadata(txis)$scVelo$velocity_pseudotime
  
   # need to 1) fix this and 2) add cellrank support pronto 
   if (scvmode == "dynamical") {
     message("Adding latent_time...")
-    txis$latent_time <- scVelo$latent_time
+    txis$latent_time <- metadata(txis)$scVelo$latent_time
   }
     
   message("Embedding velocity onto UMAP coordinates...")
