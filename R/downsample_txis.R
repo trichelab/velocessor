@@ -44,7 +44,7 @@ downsample_txis <- function(txis, maxcells=20, mincells=10, ...) {
   tosample <- apply(classified, 2, function(x) names(which(x==1)))
   sat <- list()
   for (i in names(tosample)) {
-    for (j in tosample[[samp]]) {
+    for (j in tosample[[i]]) {
       combo <- paste(i, j, sep="_")
       sat[[combo]] <- .whichcells(txis, i, j)
     }
