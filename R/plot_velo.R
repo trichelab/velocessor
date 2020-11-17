@@ -50,7 +50,7 @@ plot_velo <- function(txis, embed="UMAP", replace=FALSE, colr="velocity_pseudoti
     dat$LABEL <- paste0(dat$SAMPLE, ": ", dat$COLORING, "%") 
     pal <- inferno(100) # colorful continuous scale
   } else {
-    dat$COLORING <- dat$COLORING
+    dat[, colr] <- colData(txis)[rownames(dat), colr] 
     seed <- c("#ff0000", "#00ff00", "#0000ff") # R, G, B 
     pal <- createPalette(nlevels(dat$COLORING), seed, prefix="color")
     dat$LABEL <- paste0(dat$SAMPLE, ": ", dat[, colr])
