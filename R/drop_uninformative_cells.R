@@ -18,8 +18,8 @@ drop_uninformative_cells <- function(txis) {
   dropt <- ncol(txis) - length(kept)
   if (dropt > 0) message("Dropped ", dropt, " uninformative cells.") 
   
-  txis$sf.unspl <- sf$unspl
-  txis$sf.spl <- sf$spl
+  txis$sf.unspl <- sf[colnames(txis), "unspl"]
+  txis$sf.spl <- sf[colnames(txis), "spl"]
   return(txis[, kept])
 
 }
