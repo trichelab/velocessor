@@ -35,7 +35,7 @@ compute_velocity <- function(txis, scvmode="stochastic", ...) {
   message("Adding velocity...") 
   metadata(txis)$scVelo <- velociraptor::scvelo(txis[, kept], 
                                                 subset.row=HVGs, 
-                                                dimred=dimred, 
+                                                use.dimred=dimred, 
                                                 assay.X="spliced", 
                                                 sf.X=sfs[kept, "spl"],
                                                 sf.spliced=sfs[kept, "spl"],
