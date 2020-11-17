@@ -42,7 +42,7 @@ plot_velo <- function(txis, embed="UMAP", replace=FALSE, colr="velocity_pseudoti
 
   # for colors and point labels 
   dat$SAMPLE <- colData(txis)[rownames(dat), "sample"]
-  dat$COLORING <- colData(txis)[rownames(dat), colr]
+  dat$COLORING <- factor(colData(txis)[rownames(dat), colr])
 
   # for colors and point labels 
   if (colr == "velocity_pseudotime") {
