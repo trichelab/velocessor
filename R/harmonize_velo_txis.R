@@ -43,7 +43,7 @@ harmonize_velo_txis <- function(txis, colname="sample", how="default", ...) {
   } else {
     ncomp <- 3 # the minimum that I find useful 
   }
-  txis <- runUMAP(txis, ncomponents=ncomp, name="HARMONY")
+  txis <- runUMAP(txis, ncomponents=ncomp, dimred="HARMONY")
   message("Done.")
   return(txis)
 
