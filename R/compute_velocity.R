@@ -19,23 +19,31 @@ compute_velocity <- function(txis, mode="stochastic", ...) {
   txis$mtPercent <- (colSums(counts(txis[mt,])) / colSums(counts(txis))) * 100
   mtCut <- max(quantile(txis$mtPercent, 0.95), 10, na.rm=TRUE)
   live <- colnames(txis)[txis$mtPercent < mtCut]
+
+  dimred <- ifelse("HARMONY" %in% reducedDimNames(txis), "HARMONY", "PCA")
+  if (!dimred %in% reducedDimNames(txis)) txis <- runPCA(txis)
+  
   dec <- modelGeneVar(txis[, live])
   HVGs <- scran::getTopHVGs(dec, n=1000)
 
+  an <- c(X="spliced", spliced="spliced", unspliced="unspliced")
+  sf <- lapply(an, function(x) scuttle::librarySizeFactors(txis, assay.type=x))
+
   message("Adding velocity...") 
   metadata(txis)$scVelo <- 
-    velociraptor::scvelo(txis, subset.row=HVGs, assay.X="spliced", 
-                         mode=mode, ...) 
+    velociraptor::scvelo(txis, subset.row=HVGs, dimred=dimred, mode=mode,
+                         assay.X="spliced", sf.X=sf$spliced, 
+                         sf.spliced=sf$spliced, sf.unspliced=sf$unspliced, ...) 
 
   message("Adding velocity_pseudotime...")
   txis$velocity_pseudotime <- metadata(txis)$scVelo$velocity_pseudotime
-  
+ 
+  # need to 1) fix this and 2) add cellrank support pronto 
   if (mode == "dynamical") message("Adding latent_time...")
   if (mode == "dynamical") txis$latent_time <- metadata(txis)$scVelo$latent_time
     
   message("Embedding velocity onto UMAP coordinates...")
-  if (!"UMAP" %in% reducedDimNames(txis) | 
-      ncol(reducedDims(txis)[["UMAP"]]) < 3) { 
+  if (!"UMAP" %in% reducedDimNames(txis) | ncol(reducedDims(txis)$UMAP) < 3) { 
     if ("HARMONY" %in% reducedDimNames(txis)) {
       txis <- scater::runUMAP(txis, ncomponents=3, dimred="HARMONY")
     } else { 
