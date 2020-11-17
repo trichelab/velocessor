@@ -26,34 +26,27 @@ compute_velocity <- function(txis, scvmode="stochastic", ...) {
   dec <- modelGeneVar(txis[, live])
   HVGs <- scran::getTopHVGs(dec, n=1000)
 
-  # mandatory for velociraptor::scvelo:
-  an <- c(spl="spliced", unspl="unspliced")
-  sf <- lapply(an, function(x) scuttle::librarySizeFactors(txis, assay.type=x))
-  sfs <- do.call(cbind, sf)
-  kept <- names(which(apply(sfs, 1, function(x) all(x > 0))))
-
+  # mandatory for velociraptor::scvelo
+  txis <- drop_uninformative_cells(txis)
+    
   message("Adding velocity...") 
-  metadata(txis)$scVelo <- velociraptor::scvelo(txis[, kept], 
+  metadata(txis)$scVelo <- velociraptor::scvelo(txis,
                                                 subset.row=HVGs, 
                                                 use.dimred=dimred, 
                                                 assay.X="spliced", 
-                                                sf.X=sfs[kept, "spl"],
-                                                sf.spliced=sfs[kept, "spl"],
-                                                sf.unspliced=sfs[kept, "unspl"],
+                                                sf.X=txis$sf.spl,
+                                                sf.spliced=txis$sf.spl,
+                                                sf.unspliced=txis$sf.unspl,
                                                 mode=scvmode, 
                                                 ...) 
 
   message("Adding velocity_pseudotime...")
-  txis$velocity_pseudotime <- NA
-  with(metadata(txis),
-       colData(txis)[kept, "velocity_pseudotime"] <- scVelo$velocity_pseudotime)
+  txis$velocity_pseudotime <- scVelo$velocity_pseudotime
  
   # need to 1) fix this and 2) add cellrank support pronto 
   if (scvmode == "dynamical") {
     message("Adding latent_time...")
-    txis$latent_time <- NA
-    with(metadata(txis),
-         colData(txis)[kept, "latent_time"] <- scVelo$latent_time)
+    txis$latent_time <- scVelo$latent_time
   }
     
   message("Embedding velocity onto UMAP coordinates...")
@@ -65,8 +58,7 @@ compute_velocity <- function(txis, scvmode="stochastic", ...) {
     } 
   } 
   embedded <- 
-    velociraptor::embedVelocity(reducedDim(txis[, kept], "UMAP"), 
-                                metadata(txis)$scVelo)
+    velociraptor::embedVelocity(reducedDim(txis, "UMAP"), metadata(txis)$scVelo)
   metadata(txis)$embedded <- embedded
 
   message("Added scVelo (", scvmode, " mode) output to metadata(txis)$scVelo")
