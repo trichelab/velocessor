@@ -8,7 +8,7 @@
 #' @param txis      a SingleCellExperiment
 #' @param colname   name of colData column with the batch variable ("sample")
 #' @param how       how to respect spliced/unspliced relation, currently unused
-#' @param ...       other arguments to pass to RunHarmony
+#' @param ...       arguments to pass to RunHarmony, e.g. max.iter.harmony=20
 #' 
 #' @return          a SingleCellExperiment with "HARMONY" in reducedDimNames
 #' 

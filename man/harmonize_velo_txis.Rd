@@ -13,7 +13,7 @@ harmonize_velo_txis(txis, colname = "sample", how = "default", ...)
 
 \item{how}{how to respect spliced/unspliced relation, currently unused}
 
-\item{...}{other arguments to pass to RunHarmony}
+\item{...}{arguments to pass to RunHarmony, e.g. max.iter.harmony=20}
 }
 \value{
 \preformatted{     a SingleCellExperiment with "HARMONY" in reducedDimNames
