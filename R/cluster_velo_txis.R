@@ -20,6 +20,8 @@
 #' but we leave the default the same (because YOLO, and you can always merge).
 #' (Which is to say, also not for any particularly good reason.)
 #' 
+#' It would probably be a good idea to assess stability with `bluster` here.
+#' 
 #' @param txis        a SingleCellExperiment
 #' @param k           number of nearest neighbors, or clusters for mbkmeans (20)
 #' @param type        what type of SNNGraph to construct ("rank")

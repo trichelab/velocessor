@@ -4,7 +4,7 @@
 \alias{harmonize_velo_txis}
 \title{harness for velocity correction (currently ignorant of spliced/unspliced)}
 \usage{
-harmonize_velo_txis(txis, colname = "sample", how = "default", ...)
+harmonize_velo_txis(txis, colname = "sample", how = "default", iter = 20, ...)
 }
 \arguments{
 \item{txis}{a SingleCellExperiment}
@@ -12,6 +12,8 @@ harmonize_velo_txis(txis, colname = "sample", how = "default", ...)
 \item{colname}{name of colData column with the batch variable ("sample")}
 
 \item{how}{how to respect spliced/unspliced relation, currently unused}
+
+\item{iter}{max.iter.harmony, defaults to 20 (harmony default is 10)}
 
 \item{...}{arguments to pass to RunHarmony, e.g. max.iter.harmony=20}
 }

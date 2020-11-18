@@ -2,17 +2,20 @@
 % Please edit documentation in R/drop_uninformative_cells.R
 \name{drop_uninformative_cells}
 \alias{drop_uninformative_cells}
-\title{drop cells with an unspliced size factor of 0 (will crash scvelo).}
+\title{drop cells with an unspliced size factor of 0 (which will crash scvelo).}
 \usage{
-drop_uninformative_cells(txis)
+drop_uninformative_cells(txis, clean = TRUE)
 }
 \arguments{
 \item{txis}{a SingleCellExperiment}
+
+\item{clean}{fix negative size factors with cleanSizeFactors? (TRUE)}
 }
 \value{
 \preformatted{         a SingleCellExperiment with any useless cells omitted
 }
 }
 \description{
-drop cells with an unspliced size factor of 0 (will crash scvelo).
+Also attempts to use scran::cleanSizeFactors to recover dubious cells,
+if NumGenesExpressed is a column in colData(txis).  This may or may not be
 }

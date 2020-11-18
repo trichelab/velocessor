@@ -54,6 +54,8 @@ which Seurat uses by default, not for any particularly good reason. Note
 that \code{k} means something different (cluster number K) for minibatch K-means,
 but we leave the default the same (because YOLO, and you can always merge).
 (Which is to say, also not for any particularly good reason.)
+
+It would probably be a good idea to assess stability with \code{bluster} here.
 }
 \references{
 \

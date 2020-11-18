@@ -8,6 +8,7 @@
 #' @param txis      a SingleCellExperiment
 #' @param colname   name of colData column with the batch variable ("sample")
 #' @param how       how to respect spliced/unspliced relation, currently unused
+#' @param iter      max.iter.harmony, defaults to 20 (harmony default is 10) 
 #' @param ...       arguments to pass to RunHarmony, e.g. max.iter.harmony=20
 #' 
 #' @return          a SingleCellExperiment with "HARMONY" in reducedDimNames
@@ -15,7 +16,7 @@
 #' @import SingleCellExperiment
 #' 
 #' @export
-harmonize_velo_txis <- function(txis, colname="sample", how="default", ...) {
+harmonize_velo_txis <- function(txis, colname="sample", how="default", iter=20, ...) {
   
   if (!requireNamespace("harmony")) {
     message("You do not have harmony installed.")
@@ -34,17 +35,18 @@ harmonize_velo_txis <- function(txis, colname="sample", how="default", ...) {
   }
 
   message("Harmonizing...")
-  txis <- harmony::RunHarmony(txis, colname, ...)
+  txis <- harmony::RunHarmony(txis, colname, max.iter.harmony=20, ...)
+  message("Done. Consider harmony::HarmonyMatrix for complex experiments.")
 
   # short circuit if no UMAP
-  message("Updating UMAP...")
+  message("Updating UMAP using HARMONY reduced dimensional representation...")
   if ("UMAP" %in% reducedDimNames(txis)) {
     ncomp <- ncol(reducedDim(txis, "UMAP"))
   } else {
     ncomp <- 3 # the minimum that I find useful 
   }
   txis <- runUMAP(txis, ncomponents=ncomp, dimred="HARMONY")
-  message("Done.")
+  message("Done. Consider inspecting eig x eig plots for how many PCs to use.")
   return(txis)
 
 }
