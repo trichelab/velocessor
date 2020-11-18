@@ -18,9 +18,10 @@ get_AB(x, asy = "counts", chr = "chr3", res = 1e+05, ...)
 \item{...}{additional parameters to feed to getATACABsignal}
 }
 \value{
-\preformatted{   AB signal 
+\preformatted{   AB signal
 }
 }
 \description{
-binarize and TF-IDF, then call boundaries
+binarize & TF-IDF SCE, then call boundaries
+requires coordinates for the SCE or it will fail
 }
