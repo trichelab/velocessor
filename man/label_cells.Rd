@@ -11,7 +11,7 @@ label_cells(
   downsample = NULL,
   maxcells = 10,
   mincells = 10,
-  label = c("label.main", "label.fine"),
+  label = "label.main",
   ...
 )
 }
@@ -31,6 +31,8 @@ label_cells(
 \item{label}{which label to use ("label.main")}
 
 \item{...}{other arguments passed to SingleR}
+
+\item{ref}{a reference SummarizedExperiment (default: HPCD/ImmGen)}
 }
 \value{
 depending on the value of 'ret', either an SCE or a set of labels

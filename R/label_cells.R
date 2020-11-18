@@ -10,6 +10,7 @@
 #' @param maxcells    maximum number of cells _per_sample_ per cluster (20)
 #' @param mincells    minimum number of cells per cluster (10)
 #' @param label       which label to use ("label.main")
+#' @param ref         a reference SummarizedExperiment (default: HPCD/ImmGen)
 #' @param ...         other arguments passed to SingleR
 #'
 #' @return depending on the value of 'ret', either an SCE or a set of labels
@@ -28,7 +29,7 @@
 #' @import SingleR 
 #'
 #' @export
-label_cells <- function(txis, species=NULL, ret=c("sce", "labels"), downsample=NULL, maxcells=10, mincells=10, label=c("label.main", "label.fine"), ...) {
+label_cells <- function(txis, species=NULL, ret=c("sce", "labels"), downsample=NULL, maxcells=10, mincells=10, label="label.main", ...) {
 
   stopifnot(is(txis, "SingleCellExperiment"))
   if (is.null(species)) {
@@ -45,7 +46,6 @@ label_cells <- function(txis, species=NULL, ret=c("sce", "labels"), downsample=N
 
   ret <- match.arg(ret)
   cols <- colnames(txis)
-  label <- match.arg(label) 
   if (is.null(downsample)) downsample <- (ncol(txis) > 20000)
   if (downsample == TRUE) {
     message("Downsampling prior to cell labeling. Some labels will be NA.")
@@ -54,9 +54,11 @@ label_cells <- function(txis, species=NULL, ret=c("sce", "labels"), downsample=N
     message(length(cols), " cells sampled from ", sclusts, " clusters.")
   }
 
-  ref <- switch(species, 
-                "Homo sapiens"=celldex::HumanPrimaryCellAtlasData(), 
-                "Mus musculus"=celldex::ImmGenData())
+  if (is.null(ref)) { 
+    ref <- switch(species, 
+                  "Homo sapiens"=celldex::HumanPrimaryCellAtlasData(), 
+                  "Mus musculus"=celldex::ImmGenData())
+  }
   stopifnot(label %in% names(colData(ref)))
   labelings <- colData(ref)[, label]
   rows <- intersect(rownames(txis), rownames(ref))
