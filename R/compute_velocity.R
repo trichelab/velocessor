@@ -2,6 +2,7 @@
 #' 
 #' @param txis    A SingleCellExperiment with assays 'spliced' and 'unspliced'
 #' @param scvmode scVelo mode (default "stochastic"; "dynamical" also available)
+#' @param cleanup clean up size factors (rather than droppping cells)? (FALSE)
 #' @param ...     Additional arguments passed to velociraptor::scvelo 
 #'
 #' @return        A SingleCellExperiment with scVelo output in metadata() 
@@ -12,7 +13,7 @@
 #' @import SingleCellExperiment
 #' 
 #' @export
-compute_velocity <- function(txis, scvmode="stochastic", ...) { 
+compute_velocity <- function(txis, scvmode="stochastic", cleanup=FALSE, ...) { 
 
   message("Removing dead cells and low-variance genes for velocity")
   mt <- names(subset(rowRanges(txis), seqnames %in% c("chrM", "chrMT", "MT")))
@@ -25,10 +26,8 @@ compute_velocity <- function(txis, scvmode="stochastic", ...) {
   
   dec <- modelGeneVar(txis[, live])
   HVGs <- scran::getTopHVGs(dec, n=1000)
-
-  # mandatory for velociraptor::scvelo
-  txis <- drop_uninformative_cells(txis)
-    
+  txis <- fix_cells(txis, clean=cleanup)
+  
   message("Adding velocity...") 
   metadata(txis)$scVelo <- velociraptor::scvelo(txis,
                                                 subset.row=HVGs, 

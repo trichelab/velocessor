@@ -29,7 +29,7 @@
 #' @import SingleR 
 #'
 #' @export
-label_cells <- function(txis, species=NULL, ret=c("sce", "labels"), downsample=NULL, maxcells=10, mincells=10, label="label.main", ...) {
+label_cells <- function(txis, species=NULL, ret=c("sce", "labels"), downsample=NULL, maxcells=10, mincells=10, label="label.main", ref=NULL, ...) {
 
   stopifnot(is(txis, "SingleCellExperiment"))
   if (is.null(species)) {

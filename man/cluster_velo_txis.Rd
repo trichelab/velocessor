@@ -10,7 +10,7 @@ cluster_velo_txis(
   type = "rank",
   use = NULL,
   how = c("louvain", "density", "mbkmeans"),
-  ret = c("clust", "sce"),
+  ret = c("sce", "clust"),
   ...
 )
 }
@@ -25,7 +25,7 @@ cluster_velo_txis(
 
 \item{how}{cluster via "louvain" (default), "density", or "mbkmeans"?}
 
-\item{ret}{return "clust" assignments (default) or "sce"?}
+\item{ret}{return "clust" assignments or (default) an "sce"?}
 
 \item{...}{optional arguments to pass to clustering function(s)}
 }
@@ -58,27 +58,26 @@ but we leave the default the same (because YOLO, and you can always merge).
 It would probably be a good idea to assess stability with \code{bluster} here.
 }
 \references{
+Louvain clustering:
+Blondel VD, Guillaume JL, Lambiotte R, Lefebvre E (2008).
+Fast unfolding of communities in large networks.
+Journal of Statistical Mechanics: Theory and Experiment. 2008 (10): P10008.
+doi:10.1088/1742-5468/2008/10/P10008
 \
-Louvain clustering: \
-Blondel VD, Guillaume JL, Lambiotte R, Lefebvre E (2008). \
-Fast unfolding of communities in large networks. \
-Journal of Statistical Mechanics: Theory and Experiment. 2008 (10): P10008. \
-doi:10.1088/1742-5468/2008/10/P10008 \
+Density clustering:
+Rodriguez A, Laio A. (2014).
+Clustering by fast search and find of density peaks.
+Science, 344(6191), 1492-1496.
+doi:10.1126/science.1242072
 \
-Density clustering: \
-Rodriguez A, Laio A. (2014). \
-Clustering by fast search and find of density peaks. \
-Science, 344(6191), 1492-1496. \
-doi:10.1126/science.1242072 \
+Minibatch K-means:
+Sculley D. (2010).
+Web-Scale K-Means Clustering.
+WWW 2010, Raleigh, North Carolina, USA, ACM 978-1-60558-799-8/10/04.
+https://doi.org/10.1145/1772690.1772862
 \
-Minibatch K-means: \
-Sculley D. (2010). \
-Web-Scale K-Means Clustering. \
-WWW 2010, Raleigh, North Carolina, USA, ACM 978-1-60558-799-8/10/04. \
-https://doi.org/10.1145/1772690.1772862 \
-\
-Hicks SC, Liu R, Ni Y, Purdom E, Risso D. (2020). \
-mbkmeans: fast clustering for single cell data using mini-batch k-means. \
-bioRxiv 2020.05.27.119438 \
+Hicks SC, Liu R, Ni Y, Purdom E, Risso D. (2020).
+mbkmeans: fast clustering for single cell data using mini-batch k-means.
+bioRxiv 2020.05.27.119438
 doi: https://doi.org/10.1101/2020.05.27.119438
 }

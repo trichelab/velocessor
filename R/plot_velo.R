@@ -17,6 +17,7 @@
 #' @import plotly
 #' @import viridis
 #' @import Polychrome
+#' @import viridisLite
 #' @import velociraptor
 #' 
 #' @export 
@@ -42,7 +43,8 @@ plot_velo <- function(txis, embed="UMAP", replace=FALSE, colr="velocity_pseudoti
 
   # for colors and point labels 
   dat$SAMPLE <- colData(txis)[rownames(dat), "sample"]
-  dat$COLORING <- factor(colData(txis)[rownames(dat), colr])
+  dat$COLORING <- colData(txis)[rownames(dat), colr]
+  if (colr != "velocity_pseudotime") dat$COLORING <- factor(dat$COLORING)
 
   # for colors and point labels 
   if (colr == "velocity_pseudotime") {
@@ -51,16 +53,32 @@ plot_velo <- function(txis, embed="UMAP", replace=FALSE, colr="velocity_pseudoti
     pal <- inferno(100) # colorful continuous scale
   } else {
     dat[, colr] <- colData(txis)[rownames(dat), colr] 
+    dat[, "LABEL"] <- paste0(dat$SAMPLE, ": ", dat[, colr])
     seed <- c("#ff0000", "#00ff00", "#0000ff") # R, G, B 
     pal <- createPalette(nlevels(dat$COLORING), seed, prefix="color")
-    dat$LABEL <- paste0(dat$SAMPLE, ": ", dat[, colr])
+    names(pal) <- levels(dat$COLORING)
   }
   dat$SAMPLE <- colData(txis)[rownames(dat), "sample"]
 
   # for axis labels and formatting
   axes <- lapply(list(xaxis=1, yaxis=2, zaxis=3), .clean_axis, embed=embed)
 
+  # FIXME1: make it so the cones (velocity) and points (cells) can be turned
+  #         on/off and/or relabeled/recolored arbitrarily during interaction.
+  #
+  message("FIXME: add velocity and cells as two separate traces.") 
+
+  # FIXME2: provide a way for users to squash a 3D UMAP down into a 2D UMAP,
+  #         ideally resulting in something like the output of plot_features().
+  #
+  message("FIXME: add 3D-to-2D squashing.") 
+
+  # FIXME3: provide a way for users to switch subsetting/coloring on the fly.
+  #
+  message("FIXME: add dynamic subsetting for cells (and velocity?).")
+
   # build the plot
+  # add the velocity trace, unless requested to ditch it
   p <- plot_ly(dat,
                x = ~X,
                y = ~Y,
@@ -75,7 +93,6 @@ plot_velo <- function(txis, embed="UMAP", replace=FALSE, colr="velocity_pseudoti
                color = ~COLORING,
                hoverinfo = "text",
                showscale = FALSE,
-               showlegend = FALSE,
                colorscale = "Greys",
                alpha_stroke = I(0.5),
                alpha = I(0.75),

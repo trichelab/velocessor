@@ -27,33 +27,33 @@
 #' @param type        what type of SNNGraph to construct ("rank")
 #' @param use         which reducedDimension embedding to use (autodetermine)
 #' @param how         cluster via "louvain" (default), "density", or "mbkmeans"?
-#' @param ret         return "clust" assignments (default) or "sce"?
+#' @param ret         return "clust" assignments or (default) an "sce"?
 #' @param ...         optional arguments to pass to clustering function(s) 
 #' 
 #' @return            Cluster labels (if ret=="clust") or a now-labeled "sce"
 #' 
-#' @references \
-#' Louvain clustering: \
-#' Blondel VD, Guillaume JL, Lambiotte R, Lefebvre E (2008). \
-#' Fast unfolding of communities in large networks. \
-#' Journal of Statistical Mechanics: Theory and Experiment. 2008 (10): P10008. \
-#' doi:10.1088/1742-5468/2008/10/P10008 \
+#' @references 
+#' Louvain clustering: 
+#' Blondel VD, Guillaume JL, Lambiotte R, Lefebvre E (2008). 
+#' Fast unfolding of communities in large networks. 
+#' Journal of Statistical Mechanics: Theory and Experiment. 2008 (10): P10008.
+#' doi:10.1088/1742-5468/2008/10/P10008
 #' \
-#' Density clustering: \
-#' Rodriguez A, Laio A. (2014). \
-#' Clustering by fast search and find of density peaks. \
-#' Science, 344(6191), 1492-1496. \
-#' doi:10.1126/science.1242072 \
+#' Density clustering: 
+#' Rodriguez A, Laio A. (2014). 
+#' Clustering by fast search and find of density peaks. 
+#' Science, 344(6191), 1492-1496. 
+#' doi:10.1126/science.1242072 
 #' \ 
-#' Minibatch K-means: \
-#' Sculley D. (2010). \
-#' Web-Scale K-Means Clustering. \
-#' WWW 2010, Raleigh, North Carolina, USA, ACM 978-1-60558-799-8/10/04. \
-#' https://doi.org/10.1145/1772690.1772862 \
+#' Minibatch K-means: 
+#' Sculley D. (2010).
+#' Web-Scale K-Means Clustering.
+#' WWW 2010, Raleigh, North Carolina, USA, ACM 978-1-60558-799-8/10/04.
+#' https://doi.org/10.1145/1772690.1772862
 #' \
-#' Hicks SC, Liu R, Ni Y, Purdom E, Risso D. (2020). \
-#' mbkmeans: fast clustering for single cell data using mini-batch k-means. \
-#' bioRxiv 2020.05.27.119438 \
+#' Hicks SC, Liu R, Ni Y, Purdom E, Risso D. (2020).
+#' mbkmeans: fast clustering for single cell data using mini-batch k-means.
+#' bioRxiv 2020.05.27.119438
 #' doi: https://doi.org/10.1101/2020.05.27.119438
 #'
 #' @importFrom  scran         buildSNNGraph
@@ -63,7 +63,7 @@
 #' @import      mbkmeans
 #'
 #' @export 
-cluster_velo_txis <- function(txis, k=20, type="rank", use=NULL, how=c("louvain", "density", "mbkmeans"), ret=c("clust", "sce"), ...) { 
+cluster_velo_txis <- function(txis, k=20, type="rank", use=NULL, how=c("louvain", "density", "mbkmeans"), ret=c("sce", "clust"), ...) { 
 
   how <- match.arg(how)
   ret <- match.arg(ret)

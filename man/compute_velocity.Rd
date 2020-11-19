@@ -4,12 +4,14 @@
 \alias{compute_velocity}
 \title{velocity wrapper, modularizes pipelined loading}
 \usage{
-compute_velocity(txis, scvmode = "stochastic", ...)
+compute_velocity(txis, scvmode = "stochastic", cleanup = FALSE, ...)
 }
 \arguments{
 \item{txis}{A SingleCellExperiment with assays 'spliced' and 'unspliced'}
 
 \item{scvmode}{scVelo mode (default "stochastic"; "dynamical" also available)}
+
+\item{cleanup}{clean up size factors (rather than droppping cells)? (FALSE)}
 
 \item{...}{Additional arguments passed to velociraptor::scvelo}
 }
