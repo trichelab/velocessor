@@ -4,7 +4,7 @@
 \alias{get_AB}
 \title{a shim function}
 \usage{
-get_AB(x, asy = "counts", chr = "chr3", res = 1e+05, ...)
+get_AB(x, asy = "counts", chr = "chr3", res = 1e+05, boot = 10, ...)
 }
 \arguments{
 \item{x}{something that inherits from RangedSummarizedExperiment}
@@ -15,7 +15,9 @@ get_AB(x, asy = "counts", chr = "chr3", res = 1e+05, ...)
 
 \item{res}{resolution for compartmap bins, in base pairs (1e5)}
 
-\item{...}{additional parameters to feed to getATACABsignal}
+\item{boot}{how many bootstraps to run for compartmap (10)}
+
+\item{...}{parameters to feed to getATACABsignal (e.g. group, cores, etc)}
 }
 \value{
 \preformatted{   AB signal
@@ -23,5 +25,11 @@ get_AB(x, asy = "counts", chr = "chr3", res = 1e+05, ...)
 }
 \description{
 binarize & TF-IDF SCE, then call boundaries
+requires a genome for the SCE or it will fail
 requires coordinates for the SCE or it will fail
+don't run this on thousands of cells ungrouped or you'll be sorry
+}
+\seealso{
+\preformatted{  compartmap::getATACABsignal
+}
 }

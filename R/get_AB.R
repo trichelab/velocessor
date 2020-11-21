@@ -1,20 +1,25 @@
 #' a shim function
 #'
 #' binarize & TF-IDF SCE, then call boundaries
-#' requires coordinates for the SCE or it will fail 
+#' requires a genome for the SCE or it will fail 
+#' requires coordinates for the SCE or it will fail
+#' don't run this on thousands of cells ungrouped or you'll be sorry 
 #' 
 #' @param   x     something that inherits from RangedSummarizedExperiment
 #' @param   asy   the name of the assay to summarize down ("counts") 
 #' @param   chr   what chromosome to work on ("chr3") 
 #' @param   res   resolution for compartmap bins, in base pairs (1e5)
-#' @param   ...   additional parameters to feed to getATACABsignal 
+#' @param   boot  how many bootstraps to run for compartmap (10) 
+#' @param   ...   parameters to feed to getATACABsignal (e.g. group, cores, etc)
 #'
 #' @return        AB signal
+#'
+#' @seealso       compartmap::getATACABsignal
 #'
 #' @import        compartmap
 #'
 #' @export
-get_AB <- function(x, asy="counts", chr="chr3", res=1e5, ...) { 
+get_AB <- function(x, asy="counts", chr="chr3", res=1e5, boot=10, ...) { 
 
   gen <- unique(genome(x))[1]
   if (length(unique(genome(inv3andNBM))) == 0) stop("Your x needs coordinates!")
@@ -23,8 +28,7 @@ get_AB <- function(x, asy="counts", chr="chr3", res=1e5, ...) {
   assay(x, paste0("raw", asy)) <- assay(x, asy)
   assay(x, asy) <- t(compartmap::transformTFIDF(assay(x, asy)))
   AB <- getATACABsignal(x, res = res, chr = chr, genome = gen, 
-                        num.bootstraps = 100, bootstrap = TRUE, 
-                        group = FALSE, boot.parallel = TRUE, boot.cores = 8)
+                        num.bootstraps = boot, bootstrap = TRUE) 
 
   # what's this do? 
   #

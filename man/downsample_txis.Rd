@@ -4,7 +4,13 @@
 \alias{downsample_txis}
 \title{blockwise downsampling: try to preserve balanced clusters across samples}
 \usage{
-downsample_txis(txis, maxcells = 20, mincells = 10, ...)
+downsample_txis(
+  txis,
+  maxcells = 20,
+  mincells = 10,
+  ret = c("colname", "sce"),
+  ...
+)
 }
 \arguments{
 \item{txis}{SingleCellExperiment where !is.null(colLabels(txis))}
@@ -12,6 +18,8 @@ downsample_txis(txis, maxcells = 20, mincells = 10, ...)
 \item{maxcells}{max cells per cluster per sample (see Details) (20)}
 
 \item{mincells}{min cells per cluster per sample (see Details) (10)}
+
+\item{ret}{whether to return colnames (default, "colnames") or an "sce"}
 
 \item{...}{additional arguments to accomodate bootstrapping (not yet)}
 }

@@ -9,6 +9,7 @@
 #' @param txis      SingleCellExperiment where !is.null(colLabels(txis))
 #' @param maxcells  max cells per cluster per sample (see Details) (20)
 #' @param mincells  min cells per cluster per sample (see Details) (10)
+#' @param ret       whether to return colnames (default, "colnames") or an "sce"
 #' @param ...       additional arguments to accomodate bootstrapping (not yet)
 #'
 #' @return          colnames(txis) satisfying the sampling scheme (see Details)
@@ -35,11 +36,12 @@
 #' @import mclust
 #' 
 #' @export
-downsample_txis <- function(txis, maxcells=20, mincells=10, ...) {
+downsample_txis <- function(txis, maxcells=20, mincells=10, ret=c("colname","sce"), ...) {
 
   if (length(colLabels(txis)) < ncol(txis)) stop("colLabels() is empty!")
   if (is.null(txis$sample)) stop("txis$sample is NULL!")
-  
+  ret <- match.arg(ret)
+
   classified <- find_eligible_cells(txis, mincells=10) 
   tosample <- apply(classified, 2, function(x) names(which(x==1)))
   sat <- list()
@@ -54,7 +56,13 @@ downsample_txis <- function(txis, maxcells=20, mincells=10, ...) {
                  eligible=attr(classified, "eligible"))
 
   attr(res, "scheme") <- scheme
-  return(res) 
+
+  if (ret == "sce") { 
+    metadata(txis)$downsampling <- res
+    return(txis[, res])
+  } else { 
+    return(res) 
+  } 
 
 }
 

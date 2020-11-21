@@ -13,6 +13,6 @@
 #' @export
 plot_features <- function(txis, features, joint=TRUE, ...) {
 
-  Nebulosa::plot_density(txis, features, joint=joint)
+  Nebulosa::plot_density(txis, features, joint=joint, ...)
 
 }
