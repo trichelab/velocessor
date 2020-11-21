@@ -4,7 +4,7 @@
 \alias{plot_features}
 \title{some equivalents to Seurat standards, with or without velocity vectors}
 \usage{
-plot_features(txis, features, joint = TRUE, ...)
+plot_features(txis, features, joint = TRUE, pal = "inferno", ...)
 }
 \arguments{
 \item{txis}{a SingleCellExperiment}
@@ -12,6 +12,8 @@ plot_features(txis, features, joint = TRUE, ...)
 \item{features}{names of features (rows) to plot}
 
 \item{joint}{for multiple features, plot joint density? (TRUE)}
+
+\item{pal}{what palette to use? ("inferno", because it looks nice)}
 
 \item{...}{other arguments for Nebulosa::plot_density}
 }
