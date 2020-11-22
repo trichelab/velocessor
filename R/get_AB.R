@@ -21,14 +21,12 @@
 #' @export
 get_AB <- function(x, asy="counts", chr="chr3", res=1e5, boot=10, ...) { 
 
-  gen <- unique(genome(x))[1]
-  if (length(unique(genome(inv3andNBM))) == 0) stop("Your x needs coordinates!")
-  if (is.null(gen) | is.na(gen)) gen <- .getGenomeFromSce(x)
-
+  gen <- .get_genome(x)
+  seqlevelsStyle(x) <- "UCSC"
   assay(x, paste0("raw", asy)) <- assay(x, asy)
   assay(x, asy) <- t(compartmap::transformTFIDF(assay(x, asy)))
   AB <- getATACABsignal(x, res = res, chr = chr, genome = gen, 
-                        num.bootstraps = boot, bootstrap = TRUE) 
+                        num.bootstraps = boot, bootstrap = TRUE, ...) 
 
   # what's this do? 
   #
@@ -39,5 +37,19 @@ get_AB <- function(x, asy="counts", chr="chr3", res=1e5, boot=10, ...) {
   #   chr = "chr14", what = "flip.score", with.ci = T, median.conf = T)
 
   return(AB) 
+
+}
+
+
+# helper fn
+.get_genome <- function(sce) { 
+
+  gen <- unique(genome(sce))[1]
+  if (length(gen) == 0) stop("Cannot proceed without genomic coordinates.")
+  else if (tolower(gen) %in% c("grch38", "hg38")) return("hg38") 
+  else if (tolower(gen) %in% c("grch37", "hg19")) return("hg38") 
+  else if (tolower(gen) %in% c("grcm38", "mm10")) return("mm10") 
+  else if (tolower(gen) %in% c("grcm37", "mm9")) return("mm9") 
+  else stop("Unsupported genome \"", gen, "\". Exiting.")
 
 }
