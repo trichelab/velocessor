@@ -67,11 +67,11 @@ label_cells <- function(txis, species=NULL, ret=c("sce", "labels"), downsample=N
   # accommodate downsampling
   colData(txis)[, "celltype.sampled"] <- colnames(txis) %in% cols
 
-  celllabel <- rep(NA, ncol(txis))
+  celllabel <- rep("unlabeled", ncol(txis))
   names(celllabel) <- colnames(txis)
   celllabel[cols] <- pred[cols, "pruned.labels"]
   colData(txis)[, "celltype.label"] <- celllabel
 
-  return(switch(ret, sce=txis, labels=label))
+  return(switch(ret, sce=txis, labels=celllabel))
 
 }
