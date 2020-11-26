@@ -17,6 +17,7 @@
 #' @param   group_col   the colData column with cell annotations ("cnv_group")
 #' @param   ref_prefix  prefix for reference sample clusters ("normal_")
 #' @param   obs_prefix  prefix for tumor sample clusters ("tumor_")
+#' @param   by_cluster  add clusters for references and observations? (FALSE)
 #' @param   downsample  downsample? (TRUE, `maxcells` per cluster per sample)
 #' @param   maxcells    how many cells per sample per cluster to grab? (100) 
 #' @param   run         perform infercnv run with "sensible" defaults? (TRUE)
@@ -28,7 +29,7 @@
 #' @import              GenomeInfoDb
 #'
 #' @export
-infercnv <- function(x, group_col="cnv_group", ref_prefix="normal_", obs_prefix="tumor_", downsample=TRUE, maxcells=100, run=TRUE, cutoff=NULL, ...) { 
+infercnv <- function(x, group_col="cnv_group", ref_prefix="normal_", obs_prefix="tumor_", by_cluster=FALSE, downsample=TRUE, maxcells=100, run=TRUE, cutoff=NULL, ...) { 
 
   # needed for inferring CNV (duh)
   if (!group_col %in% names(colData(x))) {
@@ -55,9 +56,13 @@ infercnv <- function(x, group_col="cnv_group", ref_prefix="normal_", obs_prefix=
   origgenes <- nrow(x)
   if (downsample) x <- downsample_txis(x, maxcells=maxcells, ret="sce")
   gene_order <- as.data.frame(rowRanges(x))[, c("seqnames","start","end")]
+
+  # if labeling by cluster, do it now (a user can also do this manually)
   anno_df <- as.data.frame(colData(x)[, group_col, drop=FALSE])
-  ref_groups <- unique(grep(ref_prefix, colData(x)[, group_col], value=TRUE)) 
-  
+  if (by_cluster) anno_df[, 1] <- paste(anno_df[, 1], colLabels(x), sep="_")
+  ref_groups <- unique(grep(ref_prefix, anno_df[, 1], value=TRUE)) 
+ 
+  # construct the infercnv object 
   res <- infercnv::CreateInfercnvObject(raw_counts_matrix=counts(x),
                                         gene_order_file=gene_order,
                                         annotations_file=anno_df,

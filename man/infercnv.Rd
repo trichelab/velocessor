@@ -9,6 +9,7 @@ infercnv(
   group_col = "cnv_group",
   ref_prefix = "normal_",
   obs_prefix = "tumor_",
+  by_cluster = FALSE,
   downsample = TRUE,
   maxcells = 100,
   run = TRUE,
@@ -24,6 +25,8 @@ infercnv(
 \item{ref_prefix}{prefix for reference sample clusters ("normal_")}
 
 \item{obs_prefix}{prefix for tumor sample clusters ("tumor_")}
+
+\item{by_cluster}{add clusters for references and observations? (FALSE)}
 
 \item{downsample}{downsample? (TRUE, \code{maxcells} per cluster per sample)}
 
