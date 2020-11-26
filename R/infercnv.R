@@ -104,7 +104,6 @@ infercnv <- function(x, group_col="cnv_group", ref_prefix="normal_", obs_prefix=
                          denoise=TRUE, 
                          HMM=TRUE, 
                          HMM_type="i6", 
-                         HMM_report_by="cell",
                          ...)
 
     # apply median filter
