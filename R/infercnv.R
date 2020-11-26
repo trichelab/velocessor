@@ -31,15 +31,6 @@
 infercnv <- function(x, group_col="cnv_group", ref_prefix="normal_", obs_prefix="tumor_", downsample=TRUE, maxcells=100, run=TRUE, cutoff=NULL, ...) { 
 
   # needed for inferring CNV (duh)
-  stopifnot(length(unique(genome(x))) > 0) 
-  if (!requireNamespace("infercnv")) {
-    message("Cannot create infercnv objects without having installed infercnv.")
-    stop("You can install infercnv by calling BiocManager::install('infercnv')")
-  } 
-
-  # needed for my sanity
-  seqlevelsStyle(x) <- "UCSC"
-  x <- sort(keepStandardChromosomes(x))
   if (!group_col %in% names(colData(x))) {
     stop("You need to specify groups for infercnv in colData(x)$", group_col)
   } else if (!any(grepl(ref_prefix, colData(x)[, group_col]))) {
@@ -47,6 +38,15 @@ infercnv <- function(x, group_col="cnv_group", ref_prefix="normal_", obs_prefix=
   } else if (!any(grepl(obs_prefix, colData(x)[, group_col]))) { 
     stop("You need some tumors (", obs_prefix, ") in colData(x)$", group_col)
   }
+  if (!requireNamespace("infercnv")) {
+    message("Cannot create infercnv objects without having installed infercnv.")
+    stop("You can install infercnv by calling BiocManager::install('infercnv')")
+  } 
+
+  # needed for my sanity
+  stopifnot(length(unique(genome(x))) > 0) 
+  seqlevelsStyle(x) <- "UCSC"
+  x <- sort(keepStandardChromosomes(x))
   
   # now we should have all we need to proceed:
   origcells <- ncol(x)
