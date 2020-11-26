@@ -45,7 +45,7 @@ infercnv <- function(x, group_col="cnv_group", ref_prefix="normal_", obs_prefix=
   } 
 
   # needed for my sanity
-  seqlevelsStyle(x) <- "UCSC"
+  seqlevelsStyle(x) <- "NCBI" # sorts best
   stopifnot(length(unique(genome(x))) > 0) 
   labelpat <- paste0("(", ref_prefix, "|", obs_prefix, ")")
   labeled <- which(grepl(labelpat, colData(x)[, group_col]))
