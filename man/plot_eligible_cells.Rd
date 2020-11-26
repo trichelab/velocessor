@@ -21,6 +21,4 @@ This can be a useful diagnostic when setting \code{maxcells} for label_cells.
 }
 \seealso{
 label_cells
-
-downsample_txis
 }

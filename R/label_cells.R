@@ -49,7 +49,10 @@ label_cells <- function(txis, species=NULL, ret=c("sce", "labels"), downsample=N
   if (is.null(downsample)) downsample <- (ncol(txis) > 20000)
   if (downsample == TRUE) {
     message("Downsampling prior to cell labeling. Some labels will be NA.")
-    cols <- downsample_txis(txis=txis, maxcells=maxcells, mincells=mincells)
+    cols <- downsample_txis(txis=txis, 
+                            maxcells=maxcells, 
+                            mincells=mincells, 
+                            ret="colnames")
     sclusts <- sum(apply(attr(cols, "scheme")$eligible > 0, 1, any))
     message(length(cols), " cells sampled from ", sclusts, " clusters.")
   }

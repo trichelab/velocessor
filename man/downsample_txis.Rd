@@ -8,7 +8,7 @@ downsample_txis(
   txis,
   maxcells = 20,
   mincells = 10,
-  ret = c("colname", "sce"),
+  ret = c("sce", "colnames"),
   ...
 )
 }
@@ -19,7 +19,7 @@ downsample_txis(
 
 \item{mincells}{min cells per cluster per sample (see Details) (10)}
 
-\item{ret}{whether to return colnames (default, "colnames") or an "sce"}
+\item{ret}{whether to return colnames ("colnames") or (default) "sce"}
 
 \item{...}{additional arguments to accomodate bootstrapping (not yet)}
 }
@@ -41,9 +41,9 @@ a bunch of artifacts, when sample==TRUE, we fit a mixture model to the number
 of cells in each cluster, and exclude samples with few or no cells in that
 cluster from block sampling. Don't use this on SmartSeq-type data.
 
-Note that attr(downsample_txis(txis), "scheme") is a list with elements
-'mincells', 'maxcells', and 'eligible'. 'mincells' and 'maxcells' are
-integers, while 'eligible' is an integer matrix with counts of cells
+Note that attr(downsample_txis(txis, ret="colnames"), "scheme") is a list
+with elements 'mincells', 'maxcells', and 'eligible'. 'mincells' & 'maxcells'
+are integers, while 'eligible' is an integer matrix with counts of cells
 post-filtering (i.e., subject to \code{mincells} and per-cluster mixture fits).
 
 The mixture fits assume that a two-component mixture model on either

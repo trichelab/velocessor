@@ -9,7 +9,7 @@
 #' @param txis      SingleCellExperiment where !is.null(colLabels(txis))
 #' @param maxcells  max cells per cluster per sample (see Details) (20)
 #' @param mincells  min cells per cluster per sample (see Details) (10)
-#' @param ret       whether to return colnames (default, "colnames") or an "sce"
+#' @param ret       whether to return colnames ("colnames") or (default) "sce"
 #' @param ...       additional arguments to accomodate bootstrapping (not yet)
 #'
 #' @return          colnames(txis) satisfying the sampling scheme (see Details)
@@ -21,9 +21,9 @@
 #' of cells in each cluster, and exclude samples with few or no cells in that 
 #' cluster from block sampling. Don't use this on SmartSeq-type data.
 #' 
-#' Note that attr(downsample_txis(txis), "scheme") is a list with elements 
-#' 'mincells', 'maxcells', and 'eligible'. 'mincells' and 'maxcells' are 
-#' integers, while 'eligible' is an integer matrix with counts of cells 
+#' Note that attr(downsample_txis(txis, ret="colnames"), "scheme") is a list 
+#' with elements 'mincells', 'maxcells', and 'eligible'. 'mincells' & 'maxcells'
+#' are integers, while 'eligible' is an integer matrix with counts of cells 
 #' post-filtering (i.e., subject to `mincells` and per-cluster mixture fits). 
 #'
 #' The mixture fits assume that a two-component mixture model on either 
@@ -36,7 +36,7 @@
 #' @import mclust
 #' 
 #' @export
-downsample_txis <- function(txis, maxcells=20, mincells=10, ret=c("colname","sce"), ...) {
+downsample_txis <- function(txis, maxcells=20, mincells=10, ret=c("sce","colnames"), ...) {
 
   if (length(colLabels(txis)) < ncol(txis)) stop("colLabels() is empty!")
   if (is.null(txis$sample)) stop("txis$sample is NULL!")

@@ -9,7 +9,6 @@
 #' @param ...       additional arguments to pass to ComplexHeatmap::Heatmap
 #' 
 #' @seealso label_cells
-#' @seealso downsample_txis
 #' 
 #' @importFrom ComplexHeatmap Heatmap
 #' 
