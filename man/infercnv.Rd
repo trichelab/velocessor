@@ -6,31 +6,37 @@
 \usage{
 infercnv(
   x,
-  anno_col = "status",
-  ref_groups = c("normal"),
+  anno_col = "cnv_group",
+  ref_prefix = "normal_",
+  obs_prefix = "tumor_",
   downsample = TRUE,
   maxcells = 100,
   run = TRUE,
+  cutoff = NULL,
   ...
 )
 }
 \arguments{
 \item{x}{a SingleCellExperiment}
 
-\item{anno_col}{the colData column containing cell annotations ("status")}
+\item{anno_col}{the colData column with cell annotations ("cnv_group")}
 
-\item{ref_groups}{annotations of the cells to use as references ("normal")}
+\item{ref_prefix}{prefix for reference sample clusters ("normal_")}
 
-\item{downsample}{downsample? (TRUE, just grab 100 or so cells per cluster)}
+\item{obs_prefix}{prefix for tumor sample clusters ("tumor_")}
 
-\item{maxcells}{how many cells max per sample x cluster to sample? (100)}
+\item{downsample}{downsample? (TRUE, \code{maxcells} per cluster per sample)}
 
-\item{run}{perform an infercnv run with sensible defaults? (TRUE)}
+\item{maxcells}{how many cells per sample per cluster to grab? (100)}
 
-\item{...}{any other arguments for infercnv::run, e.g. \code{num_threads}}
+\item{run}{perform infercnv run with "sensible" defaults? (TRUE)}
+
+\item{cutoff}{expression cutoff for infercnv::run (default: guess)}
+
+\item{...}{other arguments for infercnv::run, e.g. \code{num_threads}}
 }
 \value{
-\preformatted{       an infercnv object
+\preformatted{         an infercnv object
 }
 }
 \description{
@@ -41,5 +47,8 @@ We do not require or import infercnv, because the requirement for JAGS can
 be a showstopper for HPC installations. This function will stop() if the
 infercnv package namespace cannot be attached, however, for obvious reasons.
 I have no idea why the \code{infercnv} function name was not taken by \code{infercnv},
-but since it wasn't, I stole it.
+but since it wasn't, I stole it. If \code{NumGenesExpressed} is among the colData
+columns for the SingleCellExperiment, and \code{run}==TRUE, then this function
+will use the former to guess a sensible value for the latter. The velocessor
+package also registers a halfway decent \code{show} method for infercnv objects.
 }
