@@ -34,9 +34,9 @@ infercnv <- function(x, group_col="cnv_group", ref_prefix="normal_", obs_prefix=
   if (!group_col %in% names(colData(x))) {
     stop("You need to specify groups for infercnv in colData(x)$", group_col)
   } else if (!any(grepl(ref_prefix, colData(x)[, group_col]))) {
-    stop("You need some normals (", ref_prefix, ") in colData(x)$", group_col)
+    stop("You need some normals (", ref_prefix, "*) in colData(x)$", group_col)
   } else if (!any(grepl(obs_prefix, colData(x)[, group_col]))) { 
-    stop("You need some tumors (", obs_prefix, ") in colData(x)$", group_col)
+    stop("You need some tumors (", obs_prefix, "*) in colData(x)$", group_col)
   }
   if (!requireNamespace("infercnv")) {
     message("Cannot create infercnv objects without having installed infercnv.")
@@ -44,9 +44,11 @@ infercnv <- function(x, group_col="cnv_group", ref_prefix="normal_", obs_prefix=
   } 
 
   # needed for my sanity
-  stopifnot(length(unique(genome(x))) > 0) 
   seqlevelsStyle(x) <- "UCSC"
-  x <- sort(keepStandardChromosomes(x))
+  stopifnot(length(unique(genome(x))) > 0) 
+  labelpat <- paste0("(", ref_prefix, "|", obs_prefix, ")")
+  labeled <- which(grepl(labelpat, colData(x)[, group_col]))
+  x <- sort(keepStandardChromosomes(x[, labeled]))
   
   # now we should have all we need to proceed:
   origcells <- ncol(x)
@@ -54,9 +56,9 @@ infercnv <- function(x, group_col="cnv_group", ref_prefix="normal_", obs_prefix=
   if (downsample) x <- downsample_txis(x, maxcells=maxcells, ret="sce")
   gene_order <- as.data.frame(rowRanges(x))[, c("seqnames","start","end")]
   anno_df <- as.data.frame(colData(x)[, group_col, drop=FALSE])
-  raw_counts <- counts(x) # spliced(x)?
+  ref_groups <- unique(grep(ref_prefix, colData(x)[, group_col], value=TRUE)) 
   
-  res <- infercnv::CreateInfercnvObject(raw_counts_matrix=raw_counts, 
+  res <- infercnv::CreateInfercnvObject(raw_counts_matrix=counts(x),
                                         gene_order_file=gene_order,
                                         annotations_file=anno_df,
                                         ref_group_names=ref_groups)
