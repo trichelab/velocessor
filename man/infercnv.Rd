@@ -6,7 +6,7 @@
 \usage{
 infercnv(
   x,
-  anno_col = "cnv_group",
+  group_col = "cnv_group",
   ref_prefix = "normal_",
   obs_prefix = "tumor_",
   downsample = TRUE,
@@ -19,7 +19,7 @@ infercnv(
 \arguments{
 \item{x}{a SingleCellExperiment}
 
-\item{anno_col}{the colData column with cell annotations ("cnv_group")}
+\item{group_col}{the colData column with cell annotations ("cnv_group")}
 
 \item{ref_prefix}{prefix for reference sample clusters ("normal_")}
 

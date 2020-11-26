@@ -14,7 +14,7 @@
 #' package also registers a halfway decent `show` method for infercnv objects.
 #' 
 #' @param   x           a SingleCellExperiment
-#' @param   anno_col    the colData column with cell annotations ("cnv_group")
+#' @param   group_col   the colData column with cell annotations ("cnv_group")
 #' @param   ref_prefix  prefix for reference sample clusters ("normal_")
 #' @param   obs_prefix  prefix for tumor sample clusters ("tumor_")
 #' @param   downsample  downsample? (TRUE, `maxcells` per cluster per sample)
@@ -28,7 +28,7 @@
 #' @import              GenomeInfoDb
 #'
 #' @export
-infercnv <- function(x, anno_col="cnv_group", ref_prefix="normal_", obs_prefix="tumor_", downsample=TRUE, maxcells=100, run=TRUE, cutoff=NULL, ...) { 
+infercnv <- function(x, group_col="cnv_group", ref_prefix="normal_", obs_prefix="tumor_", downsample=TRUE, maxcells=100, run=TRUE, cutoff=NULL, ...) { 
 
   # needed for inferring CNV (duh)
   stopifnot(length(unique(genome(x))) > 0) 
@@ -53,7 +53,7 @@ infercnv <- function(x, anno_col="cnv_group", ref_prefix="normal_", obs_prefix="
   origgenes <- nrow(x)
   if (downsample) x <- downsample_txis(x, maxcells=maxcells, ret="sce")
   gene_order <- as.data.frame(rowRanges(x))[, c("seqnames","start","end")]
-  anno_df <- as.data.frame(colData(x)[, anno_col, drop=FALSE])
+  anno_df <- as.data.frame(colData(x)[, group_col, drop=FALSE])
   raw_counts <- counts(x) # spliced(x)?
   
   res <- infercnv::CreateInfercnvObject(raw_counts_matrix=raw_counts, 
