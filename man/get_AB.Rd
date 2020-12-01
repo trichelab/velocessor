@@ -4,18 +4,31 @@
 \alias{get_AB}
 \title{a shim function}
 \usage{
-get_AB(x, asy = "counts", chr = "chr3", res = 1e+05, boot = 10, ...)
+get_AB(
+  x,
+  asy = "counts",
+  chr = "chr3",
+  res = 1e+05,
+  boot = 10,
+  minct = 1,
+  mincl = 1,
+  ...
+)
 }
 \arguments{
 \item{x}{something that inherits from RangedSummarizedExperiment}
 
-\item{asy}{the name of the assay to summarize down ("counts")}
+\item{asy}{assay to feed compartmap ("counts"; see Details)}
 
 \item{chr}{what chromosome to work on ("chr3")}
 
 \item{res}{resolution for compartmap bins, in base pairs (1e5)}
 
 \item{boot}{how many bootstraps to run for compartmap (10)}
+
+\item{minct}{minimum number of counts to consider "nonzero" (see Details)}
+
+\item{mincl}{minimum number of cells to consider "nonzero" (see Details)}
 
 \item{...}{parameters to feed to getATACABsignal (e.g. group, cores, etc)}
 }
@@ -27,7 +40,17 @@ get_AB(x, asy = "counts", chr = "chr3", res = 1e+05, boot = 10, ...)
 binarize & TF-IDF SCE, then call boundaries
 requires a genome for the SCE or it will fail
 requires coordinates for the SCE or it will fail
-don't run this on thousands of cells ungrouped or you'll be sorry
+don't run this on thousands of cells ungrouped
+}
+\details{
+The value "ratio" for \code{asy} means "unspliced / spliced" and is computed on
+the fly, for the purpose of identifying "unstable" regions of chromatin. It
+is not (repeat, NOT) ready for prime time, not least due to TF-IDF vs. LSI.
+That said, the value of \code{min} (which defaults to 1) plays an important role
+in determining which transcripts to consider: any transcript that does not
+have at least \code{minct} counts unspliced in at least \code{mincl} cells will not
+be considered in the resulting downstream analyses (which are subsetted to
+"nonzero" regions of chromatin for conformational modeling purposes).
 }
 \seealso{
 \preformatted{  compartmap::getATACABsignal
