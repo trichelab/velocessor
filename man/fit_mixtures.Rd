@@ -4,15 +4,17 @@
 \alias{fit_mixtures}
 \title{Fit mixtures. Turns out this was useful outside of downsampling, so...}
 \usage{
-fit_mixtures(x, G = 1:2)
+fit_mixtures(x, G = 1:2, log = TRUE)
 }
 \arguments{
 \item{x}{the thing to fit a 1D mixture to}
 
 \item{G}{a vector of component numbers (default is 1:2)}
+
+\item{log}{take log1p of x? (TRUE)}
 }
 \value{
-a list of fits
+a list of fits, length 1 if log == FALSE
 }
 \description{
 Fit a Gaussian mixture model to x and log1p(x) with 1-2 components (default).

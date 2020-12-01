@@ -5,33 +5,38 @@
 #' all of the observations into the same group and leave them all eligible. For
 #' prescreening of potential cluster-by-sample combinations, see find_eligible.
 #'
-#' @seealso find_eligible
+#' @seealso   find_eligible
 #' 
-#' @param x the thing to fit a 1D mixture to 
-#' @param G a vector of component numbers (default is 1:2)
+#' @param x   the thing to fit a 1D mixture to 
+#' @param G   a vector of component numbers (default is 1:2)
+#' @param log take log1p of x? (TRUE) 
 #' 
-#' @return  a list of fits
+#' @return  a list of fits, length 1 if log == FALSE 
 #' 
 #' @import  mclust
 #' 
 #' @export
-fit_mixtures <- function(x, G=1:2) { 
+fit_mixtures <- function(x, G=1:2, log=TRUE) { 
 
-  logx <- log1p(x)
   cellfits <- apply(x, 1, densityMclust, G=G, verbose=FALSE)
-  logcellfits <- apply(logx, 1, densityMclust, G=1:2, verbose=FALSE)
+  
+  if (log) logx <- log1p(x)
+  if (log) logcellfits <- apply(logx, 1, densityMclust, G=1:2, verbose=FALSE)
 
-  modelnames <- c("raw", "log")
+  modelnames <- c("raw")
+  if (log) modelnames <- c("raw", "log")
   names(modelnames) <- modelnames
-  comps <- data.frame(raw=unname(sapply(cellfits, `[[`, "G")),
-                      log=unname(sapply(logcellfits, `[[`, "G")))
-  bics <- data.frame(raw=unname(sapply(cellfits, `[[`, "bic")),
-                     log=unname(sapply(logcellfits, `[[`, "bic")))
+
+  comps <- data.frame(raw=unname(sapply(cellfits, `[[`, "G")))
+  if (log) comps$log <- unname(sapply(logcellfits, `[[`, "G"))
+  bics <- data.frame(raw=unname(sapply(cellfits, `[[`, "bic")))
+  if (log) bics$log <- unname(sapply(logcellfits, `[[`, "G"))
   rownames(comps) <- rownames(bics) <- names(cellfits)
 
   fits <- list() 
   for (cl in rownames(x)) {
-    fits[[cl]] <- list(raw=cellfits[[cl]], log=logcellfits[[cl]])
+    if (log) fits[[cl]] <- list(raw=cellfits[[cl]], log=logcellfits[[cl]])
+    else fits[[cl]] <- list(raw=cellfits[[cl]])
   }
 
   # default just returns 1 
