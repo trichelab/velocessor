@@ -4,10 +4,12 @@
 \alias{plot_densities}
 \title{another helper that grew into a real live function (albeit a pathetic one)}
 \usage{
-plot_densities(fits)
+plot_densities(fits, what = "cells")
 }
 \arguments{
 \item{fits}{the fits from fit_mixtures}
+
+\item{what}{what it is that was fitted}
 }
 \description{
 Plot densities of competing mixture fits for diagnostics.

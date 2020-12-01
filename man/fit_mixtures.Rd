@@ -4,17 +4,20 @@
 \alias{fit_mixtures}
 \title{Fit mixtures. Turns out this was useful outside of downsampling, so...}
 \usage{
-fit_mixtures(x, G = 1:2, log = TRUE)
+fit_mixtures(x, G = 1:2, log = TRUE, keep = FALSE)
 }
 \arguments{
 \item{x}{the thing to fit a 1D mixture to}
 
-\item{G}{a vector of component numbers (default is 1:2)}
+\item{G}{vector of component numbers (default is 1:2)}
 
 \item{log}{take log1p of x? (TRUE)}
+
+\item{keep}{keep the model fits as an attribute? (FALSE)}
 }
 \value{
-a list of fits, length 1 if log == FALSE
+\preformatted{ list of fits, length 1 if log == FALSE 
+}
 }
 \description{
 Fit a Gaussian mixture model to x and log1p(x) with 1-2 components (default).
@@ -23,5 +26,6 @@ all of the observations into the same group and leave them all eligible. For
 prescreening of potential cluster-by-sample combinations, see find_eligible.
 }
 \seealso{
-find_eligible
+\preformatted{find_eligible
+}
 }
