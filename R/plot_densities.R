@@ -12,7 +12,7 @@
 #' @export
 plot_densities <- function(fits, what="cells") { 
 
-  par(mfrow=c(1, length(fits)))
+  if (length(fits) > 1) par(mfrow=c(1, length(fits)))
 
   # the default
   plotDensityMclust1(fits$raw, data=fits$raw$data, xlab=what)
