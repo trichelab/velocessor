@@ -5,6 +5,7 @@
 #'
 #' @param txis  a SingleCellExperiment
 #' @param score scoring method (default is "weighted", use "xgb" if you can)
+#' @param clust use clusters? (default is TRUE; set to false with many samples)
 #' @param ...   more params for scDblFinder, e.g. `trajectoryMode` or `BPPARAM`
 #' 
 #' @return      if successful, a SingleCellExperiment with doublets dropped
@@ -12,7 +13,7 @@
 #' @import scDblFinder
 #'
 #' @export
-drop_doublets <- function(txis, score="weighted", ...) { 
+drop_doublets <- function(txis, score="weighted", clust=TRUE, ...) { 
 
   # automated during process_velo_txis
   if (!"sample" %in% names(colData(txis))) {
@@ -20,17 +21,30 @@ drop_doublets <- function(txis, score="weighted", ...) {
   } 
 
   # transitioning from colData(.)$cluster to colLabels(.) 
-  message("Trying cluster-wise doublet removal with sample labels...")
-  dbls <- try(silent=TRUE,
-              scDblFinder(txis, 
-                          clusters=colLabels(txis), 
-                          samples=txis$sample, 
-                          score=score, 
-                          ...))
+  if (clust) { 
+    
+    message("Trying cluster-wise doublet removal with sample labels...")
+    dbls <- try(silent=TRUE,
+                scDblFinder(txis, 
+                            clusters=colLabels(txis), 
+                            samples=txis$sample, 
+                            score=score, 
+                            ...))
 
+  } else { 
+
+    message("Trying sample-wise doublet removal without cluster labels...")
+    dbls <- try(silent=TRUE,
+                scDblFinder(txis, 
+                            samples=txis$sample, 
+                            score=score, 
+                            ...))
+
+  }
+  
   # if we fail, return `txis` unscathed
   if (inherits(dbls, "try-error")) {
-    message("Failed. Trying doublet removal *without* sample labels...")
+    message("Failed. Trying cluster-wise removal *without* sample labels...")
     dbls <- try(silent=TRUE, 
                 scDblFinder(txis, clusters=colLabels(txis), score=score, ...))
     if (inherits(dbls, "try-error")) {

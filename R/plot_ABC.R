@@ -34,7 +34,7 @@
 plot_ABC <- function(A, B, diff=TRUE, with=TRUE, what="counts", steps=1L, nameA="A", nameB="B", ...){
 
   if (what == "ratio") stop("This feature is not yet implemented.") # will be
-  ABC <- diff_AB(A, B, with=with, what=what, steps=steps)
+  ABC <- diff_AB(A, B, what=what, steps=steps)
 
   if (mat) { 
     
