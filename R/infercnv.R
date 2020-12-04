@@ -144,10 +144,11 @@ infercnv <- function(x, group_col="cnv_group", ref_prefix="normal_", obs_prefix=
   dims <- paste(genes, "genes on", chroms, "chromosomes from", cells, "cells")
 
   # generic options
-  amode <- with(object@options, 
-                ifelse(is.null(analysis_mode), "segmentation", analysis_mode))
+  if (!"analysis_mode" %in% names(object@options)) {
+    object@options$analysis_mode <- "segmentation"
+  }
   opt <- with(object@options, 
-              list(mode=paste0(amode, ", ",
+              list(mode=paste0(analysis_mode, ", ",
                                ifelse(HMM == "TRUE", HMM_type, "no"), " HMM",
                                ifelse(denoise == "TRUE", ", denoised", "")),
                    percell=paste(min_max_counts_per_cell[1],"reads/cell"),
