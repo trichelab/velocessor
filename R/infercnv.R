@@ -144,8 +144,10 @@ infercnv <- function(x, group_col="cnv_group", ref_prefix="normal_", obs_prefix=
   dims <- paste(genes, "genes on", chroms, "chromosomes from", cells, "cells")
 
   # generic options
+  amode <- with(object@options, 
+                ifelse(is.null(analysis_mode), "segmentation", analysis_mode))
   opt <- with(object@options, 
-              list(mode=paste0(analysis_mode, ", ",
+              list(mode=paste0(amode, ", ",
                                ifelse(HMM == "TRUE", HMM_type, "no"), " HMM",
                                ifelse(denoise == "TRUE", ", denoised", "")),
                    percell=paste(min_max_counts_per_cell[1],"reads/cell"),
@@ -176,4 +178,5 @@ infercnv <- function(x, group_col="cnv_group", ref_prefix="normal_", obs_prefix=
 
 
 #' @export
-suppressWarnings(setMethod("show", "infercnv", .show_infercnv))
+res <- try(suppressMessages(attachNamespace("infercnv")), silent=TRUE) 
+if (!inherits(res, "try-error")) setMethod("show", "infercnv", .show_infercnv)
