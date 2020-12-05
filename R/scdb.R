@@ -54,16 +54,16 @@
 #' 
 #'   p2 + facet_grid(vars(Organism)) + theme_minimal() 
 #' 
-#' @import utils
+#' @importFrom utils read.delim
 #' 
 #' @export 
-scdb <- function(URL="http://www.nxn.se/single-cell-studies/data.tsv", ...){
+scdb <- function(URL="http://www.nxn.se/single-cell-studies/data.tsv", ...) {
 
-  db <- utils::read.delim(URL, ...)
-  db$Date <- as.Date(as.character(db$Date), "%Y%m%d")
-  db$URL <- paste("http://dx.doi.org", db$DOI, sep="/")
-  db$Cells <- as.integer(gsub(",", "", db$Reported.cells.total)) 
-  db$Velocity <- (scdb$RNA.Velocity == "Yes")
+  db <- read.delim(URL, ...)
+  db$URL <- with(db, paste0("http://dx.doi.org/", DOI))
+  db$Date <- with(db, as.Date(as.character(Date), "%Y%m%d"))
+  db$Cells <- with(db, as.integer(gsub(",", "", Reported.cells.total)))
+  db$Velocity <- with(db, RNA.Velocity == "Yes")
   return(db)
 
 }
