@@ -47,18 +47,18 @@ The database itself lives at http://www.nxn.se/single-cell-studies/data.tsv
     ylab("papers") + 
     NULL 
 
-  p1 + theme_minimal() + ggtitle("Velocity in papers")
+  suppressWarnings(p1 + theme_minimal() + ggtitle("Velocity in papers"))
 
   p2 <- ggplot(subset(db, 
                       Organism \%in\% c("Human", "Mouse", "Zebrafish") & 
                       Date > five_years_ago), 
-               aes(x=Date, y=Cells, color=Organism, group=Organism)) + 
+               aes(x=Date, y=Cells, color=Organism, fill=Organism)) + 
     geom_point() + 
     geom_smooth() + 
     scale_y_log10() + 
     NULL
 
-  p2 + facet_grid(vars(Organism)) + theme_minimal() 
+  suppressWarnings(p2 + facet_grid(vars(Organism)) + theme_minimal())
 
 }
 \references{
