@@ -12,7 +12,12 @@
 check_sce <- function(sce, syms=TRUE, velo=TRUE, muscat=TRUE, ...) {
 
   why <- c()
- 
+
+  if (!is(sce, "SingleCellExperiment")) {
+    message("Can't check something that isn't a SingleCellExperiment!") 
+    return(FALSE) 
+  }
+
   if (syms) { 
     if (!"symbol" %in% names(mcols(sce))) why <- c(why, "syms: no $symbol")
     else if (any(duplicated(rowData(sce)$symbol))) why <- c(why, "syms: dupes")
