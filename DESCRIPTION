@@ -15,7 +15,6 @@ Depends:
     SingleCellExperiment,
     BiocParallel
 Imports:
-    muscat,
     Matrix,
     viridis,
     Nebulosa, 
@@ -43,6 +42,7 @@ Imports:
     tximeta
 Suggests:
     covr,
+    muscat,
     bluster,
     testthat,
     compartmap (>= 1.7.2),
