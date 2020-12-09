@@ -9,7 +9,7 @@
 #' @param drop  drop doublets (instead of just marking them)? (TRUE; drop them) 
 #' @param ...   more params for scDblFinder, e.g. `trajectoryMode` or `BPPARAM`
 #' 
-#' @return      if successful, a SingleCellExperiment with doublets dropped
+#' @return      if successful, SingleCellExperiment with doublets marked/dropped
 #' 
 #' @import scDblFinder
 #'

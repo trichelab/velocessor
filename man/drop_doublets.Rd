@@ -18,7 +18,7 @@ drop_doublets(txis, score = "weighted", clust = TRUE, drop = TRUE, ...)
 \item{...}{more params for scDblFinder, e.g. \code{trajectoryMode} or \code{BPPARAM}}
 }
 \value{
-\preformatted{ if successful, a SingleCellExperiment with doublets dropped
+\preformatted{ if successful, SingleCellExperiment with doublets marked/dropped
 }
 }
 \description{
