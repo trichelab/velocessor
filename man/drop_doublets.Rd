@@ -4,7 +4,7 @@
 \alias{drop_doublets}
 \title{simple automated doublet marking for pipelining}
 \usage{
-drop_doublets(txis, score = "weighted", clust = TRUE, ...)
+drop_doublets(txis, score = "weighted", clust = TRUE, drop = TRUE, ...)
 }
 \arguments{
 \item{txis}{a SingleCellExperiment}
@@ -12,6 +12,8 @@ drop_doublets(txis, score = "weighted", clust = TRUE, ...)
 \item{score}{scoring method (default is "weighted", use "xgb" if you can)}
 
 \item{clust}{use clusters? (default is TRUE; set to false with many samples)}
+
+\item{drop}{drop doublets (instead of just marking them)? (TRUE; drop them)}
 
 \item{...}{more params for scDblFinder, e.g. \code{trajectoryMode} or \code{BPPARAM}}
 }
