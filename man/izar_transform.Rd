@@ -4,27 +4,19 @@
 \alias{izar_transform}
 \title{generalizes the transformation from Izar et al 2020 for plate-seq data}
 \usage{
-izar_transform(
-  txis,
-  ret = c("sce", "matrix"),
-  orig = "counts",
-  dupe_rate = 10,
-  pseudocount = 1
-)
+izar_transform(txis, orig = "tpm", dupes = 10, pseudo = 1)
 }
 \arguments{
 \item{txis}{a SingleCellExperiment}
 
-\item{ret}{return "sce" (default) or "matrix" of transformed values?}
+\item{orig}{the name of the assay to transform ("tpm")}
 
-\item{orig}{the name of the assay to transform ("counts")}
+\item{dupes}{an estimated duplication rate (default is 10, per Izar)}
 
-\item{dupe_rate}{an estimated duplication rate (default is 10, per Izar)}
-
-\item{pseudocount}{a pseudocount to add to TPM/dupe_rate (default 1, ibid)}
+\item{pseudo}{a pseudocount to add to (TPM/dupes) (default 1, ibid)}
 }
 \value{
-\preformatted{       a SingleCellExperiment with `izar` or matrix (per `ret`)
+\preformatted{       a SingleCellExperiment with assay `izar`
 }
 }
 \description{

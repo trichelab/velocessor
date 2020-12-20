@@ -11,10 +11,9 @@
 #' We caution the user that 'comparable' is a subjective term here.
 #' 
 #' @param txis        a SingleCellExperiment
-#' @param orig        the name of the assay to transform ("counts") 
-#' @param ret         return "sce" (default) or "matrix" of transformed values?
-#' @param dupe_rate   an estimated duplication rate (default is 10, per Izar)
-#' @param pseudocount a pseudocount to add to TPM/dupe_rate (default 1, ibid)
+#' @param orig        the name of the assay to transform ("tpm") 
+#' @param dupes       an estimated duplication rate (default is 10, per Izar)
+#' @param pseudo      a pseudocount to add to (TPM/dupes) (default 1, ibid)
 #' 
 #' @details 
 #'
@@ -30,7 +29,7 @@
 #' the resulting matrix, or similar shenanigans. Alternatively, one may use
 #' a UMI-enabled plate-seq preparation to elide this transformation. 
 #' 
-#' @return            a SingleCellExperiment with `izar` or matrix (per `ret`)
+#' @return            a SingleCellExperiment with assay `izar`
 #'
 #' @references 
 #' Izar B, Tirosh I, Stover EH, et al. A single-cell landscape of high-grade 
@@ -40,14 +39,12 @@
 #' @import            SingleCellExperiment
 #' 
 #' @export 
-izar_transform <- function(txis, ret=c("sce","matrix"), orig="counts", dupe_rate=10, pseudocount=1) {
+izar_transform <- function(txis, orig="tpm", dupes=10, pseudo=1) {
   
-  ret <- match.arg(ret)
-  stopifnot(dupe_rate > 0)
-  assay(txis, "izar") <- log2( (assay(txis, orig) / dupe_rate) + pseudocount )
-  metadata(txis)$izar_dupe_rate <- dupe_rate
-  metadata(txis)$izar_pseudocount <- pseudocount
-  if (ret == "sce") return(txis)
-  else return(assay(txis, "izar"))
+  stopifnot(dupes > 0)
+  assay(txis, "izar") <- log2( (assay(txis, orig) / dupes) + pseudo )
+  metadata(txis)$izar_dupes <- dupes
+  metadata(txis)$izar_pseudo <- pseudo
+  return(txis)
 
 }
