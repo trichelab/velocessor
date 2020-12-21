@@ -1,5 +1,11 @@
 #' import plate-seq velocity information (from Salmon) to a SingleCellExperiment
 #'
+#' Automated (more or less) importation of STORM-seq and SMART-seq[123] data for
+#' downstream attempts at merging with droplet data, index sort visualization, 
+#' and so forth. 
+#' 
+#' FIXME: Add Kallisto support and Arkas style txome/repeatome/spikeome support.
+#'
 #' @param   quants  where the quant.sf files are
 #' @param   t2g     required file with tx2gene information for TPM calcs
 #' @param   type    What type of quantifications are these? ("salmon") 
@@ -71,6 +77,7 @@ import_plate_txis <- function(quants, t2g=NA, type="salmon", ...) {
   return(txis) 
 
 }
+
 
 # helper fn
 .getGTF <- function(cmd) jsonlite::fromJSON(cmd)$geneMap

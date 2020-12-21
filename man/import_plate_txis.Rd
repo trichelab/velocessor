@@ -20,5 +20,10 @@ import_plate_txis(quants, t2g = NA, type = "salmon", ...)
 }
 }
 \description{
-import plate-seq velocity information (from Salmon) to a SingleCellExperiment
+Automated (more or less) importation of STORM-seq and SMART-seq\link{123} data for
+downstream attempts at merging with droplet data, index sort visualization,
+and so forth.
+}
+\details{
+FIXME: Add Kallisto support and Arkas style txome/repeatome/spikeome support.
 }

@@ -28,3 +28,6 @@ takes a single-row data.frame containing 'names' and 'files' as its columns.
 'sep' allows deduplicating barcodes by sample using cbind without incident
 once the results of import_velo_txis are returned to process_velo_txis.
 }
+\details{
+FIXME: Add Kallisto support and Arkas style txome/repeatome/spikeome support.
+}

@@ -6,6 +6,8 @@
 #' 'sep' allows deduplicating barcodes by sample using cbind without incident 
 #' once the results of import_velo_txis are returned to process_velo_txis.
 #' 
+#' FIXME: Add Kallisto support and Arkas style txome/repeatome/spikeome support.
+#' 
 #' @param   cdat    A row of the colData prepared by process_velo_txis.
 #' @param   quant   What type of quantifications are these? ("alevin")
 #' @param   meta    Use tximeta for imports? (FALSE; can fail unexpectedly)
