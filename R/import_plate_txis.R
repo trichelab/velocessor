@@ -44,7 +44,8 @@ import_plate_txis <- function(quants, t2g=NA, type="salmon", ...) {
   rr <- .rowRanges(gtf, asys)
   
   message("Constructing sample annotations...")
-  cd <- DataFrame(sample=ifelse(!is.null(names(quants)), names(quants), quants))
+  cd <- DataFrame(sample=quants)
+  if (!is.null(names(quants))) cd <- DataFrame(sample=names(quants))
   txi <- SingleCellExperiment(asys, rowRanges=rr, colData=cd)
 
   message("Splitting...")
