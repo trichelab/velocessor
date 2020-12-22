@@ -10,6 +10,7 @@
 #' @param embed       which reducedDims() element to use for plotting? (UMAP)
 #' @param replace     replace any existing metadata element `embedded`? (FALSE)
 #' @param colr        column(s) to use for colors (default: velocity_pseudotime)
+#' @param flip        flip the velocity arrows? (FALSE, but useful anyways)
 #' @param ...         optional arguments to pass to plotly::plot_ly()
 #' 
 #' @return            a plotly plot
@@ -21,7 +22,7 @@
 #' @import velociraptor
 #' 
 #' @export 
-plot_velo <- function(txis, embed="UMAP", replace=FALSE, colr="velocity_pseudotime", ...) {
+plot_velo <- function(txis, embed="UMAP", replace=FALSE, colr="velocity_pseudotime", flip=FALSE, ...) {
 
   # sanity checking 
   if (!.velo_ok(txis)) stop("Velocity information missing. Cannot proceed.") 
@@ -35,11 +36,14 @@ plot_velo <- function(txis, embed="UMAP", replace=FALSE, colr="velocity_pseudoti
   swap <- c(".1"="X", ".2"="Y", ".3"="Z", "start"="")
   for (s in names(swap)) names(dat) <- sub(s, swap[s], fixed=TRUE, names(dat))
   
-  # for cones
+  # for cones (refactor this out) 
   starts <- c("U"="X", "V"="Y", "W"="Z")
   ends <- paste0("end", starts)
   names(ends) <- names(starts)
   for (n in names(ends)) dat[, n] <- dat[, ends[n]] - dat[, starts[n]]
+
+  # ghetto cellrank
+  if (flip) for (n in names(ends)) dat[, n] <- dat[, starts[n]] - dat[, ends[n]]
 
   # for colors and point labels 
   dat$SAMPLE <- colData(txis)[rownames(dat), "sample"]

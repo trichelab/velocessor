@@ -9,6 +9,7 @@ plot_velo(
   embed = "UMAP",
   replace = FALSE,
   colr = "velocity_pseudotime",
+  flip = FALSE,
   ...
 )
 }
@@ -20,6 +21,8 @@ plot_velo(
 \item{replace}{replace any existing metadata element \code{embedded}? (FALSE)}
 
 \item{colr}{column(s) to use for colors (default: velocity_pseudotime)}
+
+\item{flip}{flip the velocity arrows? (FALSE, but useful anyways)}
 
 \item{...}{optional arguments to pass to plotly::plot_ly()}
 }
