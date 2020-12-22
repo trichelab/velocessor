@@ -12,6 +12,7 @@
 #' @param   feats   optional file with intron-exon-gene mappings (guess) 
 #' @param   type    What type of quantifications are these? ("alevin") 
 #' @param   QC      Perform rudimentary quality control? (TRUE) 
+#' @param   tpms    compute TPMs? (FALSE; can create a CHOLMOD error)
 #' @param   sep     What string separates sample name from barcode? ("_")
 #' @param   ...     additional parameters to pass to tximport, if any
 #' 
@@ -28,7 +29,7 @@
 #' @import SingleCellExperiment
 #' 
 #' @export
-import_droplet_txis <- function(quants, feats=NULL, type=c("alevin"), QC=TRUE, sep="_", ...) {
+import_droplet_txis <- function(quants, feats=NULL, type=c("alevin"), QC=TRUE, tpms=FALSE, sep="_", ...) {
 
   params <- data.frame() 
   type <- match.arg(type) 
@@ -64,8 +65,8 @@ import_droplet_txis <- function(quants, feats=NULL, type=c("alevin"), QC=TRUE, s
   }  # add kallisto etc. here in future
 
   stopifnot("feats" %in% names(params)) 
-  message("Processing ", paste(rownames(params), collapse=" and "))
   qnames <- rownames(params)
+  message("Processing ", paste(qnames, collapse=" and "))
   names(qnames) <- qnames 
 
   # could presumably mclapply or bplapply here
@@ -82,9 +83,11 @@ import_droplet_txis <- function(quants, feats=NULL, type=c("alevin"), QC=TRUE, s
   assays(txis) <- list(counts=assays(txis)[["spliced"]],
                        spliced=assays(txis)[["spliced"]],
                        unspliced=assays(txis)[["unspliced"]])
-  
-  message("Calculating TPMs...")
-  txis <- .compute_tpms(txis) 
+ 
+  if (tpms) {  
+    message("Calculating TPMs...")
+    txis <- .compute_tpms(txis) 
+  }
 
   # stupid simple QC
   if (QC) {

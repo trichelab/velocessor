@@ -9,6 +9,7 @@ import_droplet_txis(
   feats = NULL,
   type = c("alevin"),
   QC = TRUE,
+  tpms = FALSE,
   sep = "_",
   ...
 )
@@ -21,6 +22,8 @@ import_droplet_txis(
 \item{type}{What type of quantifications are these? ("alevin")}
 
 \item{QC}{Perform rudimentary quality control? (TRUE)}
+
+\item{tpms}{compute TPMs? (FALSE; can create a CHOLMOD error)}
 
 \item{sep}{What string separates sample name from barcode? ("_")}
 
