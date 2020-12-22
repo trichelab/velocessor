@@ -53,7 +53,7 @@ plot_velo <- function(txis, embed="UMAP", replace=FALSE, colr="velocity_pseudoti
   # for colors and point labels 
   if (colr == "velocity_pseudotime") {
     dat$COLORING <- round(dat$COLORING * 100) # percent
-    if (flip) dat$COLORING <- 100 - dat$coloring # reverse it
+    if (flip) dat$COLORING <- 100 - dat$COLORING # reverse it
     dat$LABEL <- paste0(dat$SAMPLE, ": ", dat$COLORING, "%") 
     pal <- inferno(100) # colorful continuous scale
   } else {
