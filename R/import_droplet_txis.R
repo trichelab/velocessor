@@ -41,8 +41,8 @@ import_droplet_txis <- function(quants, feats=NULL, type=c("alevin"), QC=TRUE, s
                       function(x) jsonlite::fromJSON(x)$index)
     if (length(unique(indices)) > 1) stop("Your quants use different indices!")
 
-    gtfs <- sapply(file.path(quants, "cmd_info.json"), 
-                   function(x) jsonlite::fromJSON(x)$gtf)
+    gtfs <- sapply(file.path(quants, "cmd_info.json"), function(x) 
+                   sub("tx2gene.tsv", "gtf", jsonlite::fromJSON(x)$tgMap))
     if (length(unique(gtfs)) > 1) stop("Your quants use different GTFs!")
     stopifnot(file.exists(unique(gtfs))) # so tximeta doesn't puke
     if (is.null(feats)) feats <- sub("\\.gtf", ".features.tsv", unique(gtfs))
