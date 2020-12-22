@@ -63,10 +63,12 @@ import_droplet_txis <- function(quants, feats=NULL, type=c("alevin"), QC=TRUE, s
 
   }  # add kallisto etc. here in future
 
-  stopifnot(!"feats" %in% names(params)) 
+  stopifnot("feats" %in% names(params)) 
   message("Processing ", paste(rownames(params), collapse=" and "))
   qnames <- rownames(params)
   names(qnames) <- qnames 
+
+  # could presumably mclapply or bplapply here
   txi <- do.call(cbind, lapply(qnames, .import_alevin, params=params, sep=sep))
 
   # needs to be sped up 
@@ -102,7 +104,8 @@ import_droplet_txis <- function(quants, feats=NULL, type=c("alevin"), QC=TRUE, s
 .import_alevin <- function(qname, params, sep="_") {
   
   param <- params[qname, , drop=FALSE] 
-  asys <- with(param, tximport(quant, type="alevin")) # recycle for kallisto 
+  message("Importing ", param[, "files"], "...")
+  asys <- with(param, tximport(files, type="alevin"))["counts"] # stay as list
   stats <- with(param, read.table(stats, head=TRUE, row=1))
   rr <- with(param, .rowRanges_from_gtf(gtf)[rownames(asys$counts)])
   cd <- DataFrame(stats)[colnames(asys$counts),]
