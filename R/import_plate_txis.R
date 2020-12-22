@@ -65,6 +65,7 @@ import_plate_txis <- function(quants, t2g=NA, type="salmon", ...) {
   assay(txis2, "tpm") <- assays(txis2)[[1]] + assays(txis2)[[2]]
   for (an in assayNames(txis2)) assay(txis, an) <- assay(txis2, an)
   txis <- as(txis, "SingleCellExperiment") 
+  colnames(txis) <- make.unique(colnames(txis)) # else many things will fail
   rm(txis2)
 
   message("adding NumGenesExpressed...")
