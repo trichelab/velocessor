@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_AB.R
 \name{get_AB}
 \alias{get_AB}
-\title{a shim function}
+\title{a shim function, mostly to feed plot_ABC()}
 \usage{
 get_AB(
   x,

@@ -1,4 +1,4 @@
-#' a shim function
+#' a shim function, mostly to feed plot_ABC()
 #'
 #' binarize & TF-IDF SCE, then call boundaries
 #' requires a genome for the SCE or it will fail 
@@ -47,8 +47,9 @@ get_AB <- function(x, asy="counts", chr="chr3", res=1e5, boot=10, minct=1, mincl
   } else { 
     assay(x, paste0("raw", asy)) <- assay(x, asy)
   }
-  
-  assay(x, asy) <- t(compartmap::transformTFIDF(assay(x, asy)))
+ 
+  # this does bad things sometimes  
+  assay(x, asy) <- t(compartmap::transformTFIDF(as.matrix(assay(x, asy))))
   AB <- getATACABsignal(x, res = res, chr = chr, genome = gen, 
                         num.bootstraps = boot, bootstrap = TRUE, ...) 
   AB <- fixCompartments(AB)
