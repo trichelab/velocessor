@@ -99,7 +99,9 @@ import_droplet_txis <- function(quants, feats=NULL, type=c("alevin"), QC=TRUE, t
   } 
 
   message("Done.")
+  metadata(txis)$origin <- "droplet"
   return(txis) 
+
 }
 
 

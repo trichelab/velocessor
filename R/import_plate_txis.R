@@ -75,6 +75,7 @@ import_plate_txis <- function(quants, t2g=NA, type="salmon", ...) {
   txis <- scuttle::logNormCounts(txis)
 
   message("Done.")
+  metadata(txis)$origin <- "plate"
   return(txis) 
 
 }
