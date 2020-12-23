@@ -59,7 +59,7 @@ plot_velo <- function(txis, embed="UMAP", replace=FALSE, colr="velocity_pseudoti
   } else {
     dat[, colr] <- colData(txis)[rownames(dat), colr] 
     dat[, "LABEL"] <- paste0(dat$SAMPLE, ": ", dat[, colr])
-    seed <- c("#ff0000", "#00ff00", "#0000ff") # R, G, B 
+    seed <- c("#ff0000", "#0000ff", "#00ff00") # R, B, G 
     pal <- createPalette(nlevels(dat$COLORING), seed, prefix="color")
     names(pal) <- levels(dat$COLORING)
   }
