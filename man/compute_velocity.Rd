@@ -4,10 +4,18 @@
 \alias{compute_velocity}
 \title{velocity wrapper, modularizes pipelined loading}
 \usage{
-compute_velocity(txis, scvmode = "stochastic", cleanup = FALSE, ...)
+compute_velocity(
+  txis,
+  embed = "UMAP",
+  scvmode = "stochastic",
+  cleanup = FALSE,
+  ...
+)
 }
 \arguments{
 \item{txis}{A SingleCellExperiment with assays 'spliced' and 'unspliced'}
+
+\item{embed}{Into which reducedDims() element shall scVelo project? (UMAP)}
 
 \item{scvmode}{scVelo mode (default "stochastic"; "dynamical" also available)}
 
@@ -20,5 +28,5 @@ compute_velocity(txis, scvmode = "stochastic", cleanup = FALSE, ...)
 }
 }
 \description{
-velocity wrapper, modularizes pipelined loading
+FIXME: add CellRank inference of directions
 }

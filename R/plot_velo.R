@@ -10,7 +10,7 @@
 #' @param embed       which reducedDims() element to use for plotting? (UMAP)
 #' @param replace     replace any existing metadata element `embedded`? (FALSE)
 #' @param colr        column(s) to use for colors (default: velocity_pseudotime)
-#' @param flip        flip the velocity arrows? (FALSE, but useful anyways)
+#' @param flip        flip the velocity arrows (ghetto CellRank)? (FALSE)
 #' @param ...         optional arguments to pass to plotly::plot_ly()
 #' 
 #' @return            a plotly plot
@@ -31,7 +31,10 @@ plot_velo <- function(txis, embed="UMAP", replace=FALSE, colr="velocity_pseudoti
   embedded <- .get_embedding(txis, embed=embed, replace=replace) 
 
   # now actually get to work 
-  dat <- velociraptor::gridVectors(reducedDims(txis)[[embed]], embedded)
+  stopifnot(nrow(reducedDims(txis)[[embed]]) == nrow(embedded))
+  stopifnot(ncol(reducedDims(txis)[[embed]]) >= ncol(embedded))
+  cols <- seq_along(ncols(embedded))
+  dat <- velociraptor::gridVectors(reducedDims(txis)[[embed]][,cols], embedded)
   rownames(dat) <- colnames(txis)[as.integer(rownames(dat))]
   swap <- c(".1"="X", ".2"="Y", ".3"="Z", "start"="")
   for (s in names(swap)) names(dat) <- sub(s, swap[s], fixed=TRUE, names(dat))

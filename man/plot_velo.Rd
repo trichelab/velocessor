@@ -22,7 +22,7 @@ plot_velo(
 
 \item{colr}{column(s) to use for colors (default: velocity_pseudotime)}
 
-\item{flip}{flip the velocity arrows? (FALSE, but useful anyways)}
+\item{flip}{flip the velocity arrows (ghetto CellRank)? (FALSE)}
 
 \item{...}{optional arguments to pass to plotly::plot_ly()}
 }

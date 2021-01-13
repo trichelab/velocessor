@@ -33,8 +33,17 @@ plot outcomes of 96-, 384-, or 1536-well plate sequencing runs
  sce$NumGenesExpressed <- colSums(counts(sce) > 0)
  sce$well <- wells
 
- # plot it 
- make_plate_plots(sce)
+ # plot it with $well
+ make_plate_plot(sce)
+
+ # plot it using colnames
+ colnames(sce) <- sce$well
+ sce$well <- NULL # drop
+ # ensure case is ignored for now
+ changecase <- sample(seq_len(ncol(sce)), round(ncol(sce)/2))
+ colnames(sce)[changecase] <- toupper(colnames(sce)[changecase])
+ colnames(sce)[-changecase] <- tolower(colnames(sce)[-changecase])
+ make_plate_plot(sce)
 
 }
 \seealso{

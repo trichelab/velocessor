@@ -19,14 +19,22 @@
 #'  sce$NumGenesExpressed <- colSums(counts(sce) > 0)
 #'  sce$well <- wells
 #' 
-#'  # plot it 
-#'  make_plate_plots(sce)
+#'  # plot it with $well
+#'  make_plate_plot(sce)
+#' 
+#'  # plot it using colnames
+#'  colnames(sce) <- sce$well
+#'  sce$well <- NULL # drop
+#'  # ensure case is ignored for now
+#'  changecase <- sample(seq_len(ncol(sce)), round(ncol(sce)/2))
+#'  colnames(sce)[changecase] <- toupper(colnames(sce)[changecase])
+#'  colnames(sce)[-changecase] <- tolower(colnames(sce)[-changecase])
+#'  make_plate_plot(sce)
 #' 
 #' @seealso platetools::raw_map 
 #' @seealso platetools::b_map 
 #' 
 #' @import platetools
-#' @import stats
 #' 
 #' @export 
 make_plate_plot <- function(txis, column="NumGenesExpressed", ...) { 
@@ -35,7 +43,9 @@ make_plate_plot <- function(txis, column="NumGenesExpressed", ...) {
     well <- .tidy_well_names(txis$well, pad=TRUE)
   } else if (all(c("row","column") %in% names(colData(txis)))) {
     well <- .tidy_well_names(paste0(txis$row, txis$column), pad=TRUE) 
-  } else {
+  } else if (all(.colnames_are_wells(txis))) {
+    well <- colnames(txis)
+  } else { 
     stop("Don't know how to find the well or row or column for runs.")
   }
 
@@ -43,7 +53,8 @@ make_plate_plot <- function(txis, column="NumGenesExpressed", ...) {
     stop("Plate-grid plots are not supported yet. Use platetools directly.")
   }
 
-  plt <- ifelse(length(well) < 384, 96, ifelse(length(well) < 1536, 384, 1536))
+  # choose the number of wells in the obvious way so that I don't have to think
+  plt <- ifelse(length(well) < 97, 96, ifelse(length(well) < 384, 384, 1536))
   p <- raw_map(data=colData(txis)[, column], well=well, plate=plt, ...)
   p + legend_title(gsub("([a-z])([A-Z])", "\\1\n\\2", column))
 
@@ -57,5 +68,13 @@ make_plate_plot <- function(txis, column="NumGenesExpressed", ...) {
   number <- as.integer(substr(well, 2, max(nchar(well))))
   fmt <- paste0("%s%", ifelse(pad, "0.", ""), max(nchar(number)), "i")
   gsub(" ", "", sprintf(fmt, letter, number)) 
+
+}
+
+
+# helper fn
+.colnames_are_wells <- function(txis) {
+
+  grepl("^[a-z]+[0-9]+", ignore.case=TRUE, colnames(txis))
 
 }
