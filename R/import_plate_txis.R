@@ -37,8 +37,8 @@ import_plate_txis <- function(quants, t2g=NA, type="salmon",
     tx2gene <- read.delim(t2g, sep="\t", head=FALSE)
   }
 
-  if (!all(file.exists(quants))) stop("Some of your quant files don't exist.") 
-  cmds <- sub("quant.*sf", "cmd_info.json", quants)
+  if (!all(file.exists(quants))) stop("Some of your quant files don't exist.")
+  cmds <- unlist(lapply(quants, FUN = function(x) gsub("quant\\.*sf", "cmd_info.json", x)))
   if (!all(file.exists(cmds))) stop("Some quants don't have cmd_info.json")
   if (!is.null(gtf)) {
     stopifnot(file.exists(gtf))
@@ -62,6 +62,9 @@ import_plate_txis <- function(quants, t2g=NA, type="salmon",
   cd <- DataFrame(sample=quants)
   if (!is.null(names(quants))) cd <- DataFrame(sample=names(quants))
   txi <- SingleCellExperiment(asys, rowRanges=rr, colData=cd)
+  
+  ## catch and remove empty cells
+  txi <- .removeEmptyCells(txi)
 
   message("Splitting...")
   feats <- sub("\\.gtf", ".features.tsv", gtf)
@@ -108,4 +111,10 @@ import_plate_txis <- function(quants, t2g=NA, type="salmon",
   names(gxs) <- gxs$gene_id
   granges(gxs)[rownames(asys$counts)]
 
+}
+
+# helper fn
+.removeEmptyCells <- function(se) {
+  message("Removing failed cells.")
+  se[,colSums(assay(se)) > 0]
 }
