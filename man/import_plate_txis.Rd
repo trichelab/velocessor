@@ -26,4 +26,5 @@ and so forth.
 }
 \details{
 FIXME: Add Kallisto support and Arkas style txome/repeatome/spikeome support.
+FIXME: Add in ability to support bootstraps/Gibbs samples from salmon
 }

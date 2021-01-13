@@ -5,6 +5,7 @@
 #' and so forth. 
 #' 
 #' FIXME: Add Kallisto support and Arkas style txome/repeatome/spikeome support.
+#' FIXME: Add in ability to support bootstraps/Gibbs samples from salmon
 #'
 #' @param   quants  where the quant.sf files are
 #' @param   t2g     required file with tx2gene information for TPM calcs
@@ -57,7 +58,14 @@ import_plate_txis <- function(quants, t2g=NA, type="salmon", ...) {
   message("Splitting...")
   feats <- sub("\\.gtf", ".features.tsv", gtf)
   cg <- read.delim(feats, header=TRUE, as.is=TRUE)
-  colnames(cg)[colnames(cg) == "intron"] <- "unspliced"
+  if ("intron" %in% colnames(cg)) {
+    message("WARNING: using a full-length protocol and only using intron pieces may miss relevant reads/unspliced transcripts.")
+    message("Ideally, you want to create the reference with 'unspliced' instead of 'introns' with eisaR.")
+    colnames(cg)[colnames(cg) == "intron"] <- "unspliced"
+  } else {
+    ## check to make sure 'unspliced' is there in the features tsv
+    stopifnot("unspliced" %in% colnames(cg))
+  }
   txis <- tximeta::splitSE(txi, cg, assayName="counts")
   assay(txis, "counts") <- assays(txis)[[1]] + assays(txis)[[2]]
   txis2 <- tximeta::splitSE(txi, cg, assayName="tpm")
