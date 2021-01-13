@@ -10,6 +10,7 @@
 #' @param   quants  where the quant.sf files are
 #' @param   t2g     required file with tx2gene information for TPM calcs
 #' @param   type    What type of quantifications are these? ("salmon") 
+#' @param   gtf     Where an expanded GTF lives if not already collapsed to gene-level
 #' @param   ...     additional parameters to pass to tximport, if any
 #' 
 #' @return          A SingleCellExperiment with 'spliced' & 'unspliced' assays.
@@ -22,7 +23,8 @@
 #' @import SingleCellExperiment
 #' 
 #' @export
-import_plate_txis <- function(quants, t2g=NA, type="salmon", ...) {
+import_plate_txis <- function(quants, t2g=NA, type="salmon",
+                              gtf=NULL, ...) {
 
   if (is.na(t2g)) {
     message("No transcript to gene mapping file provided. Cannot compute TPM.")
@@ -38,7 +40,13 @@ import_plate_txis <- function(quants, t2g=NA, type="salmon", ...) {
   if (!all(file.exists(quants))) stop("Some of your quant files don't exist.") 
   cmds <- sub("quant.*sf", "cmd_info.json", quants)
   if (!all(file.exists(cmds))) stop("Some quants don't have cmd_info.json")
-  gtfs <- sapply(cmds, .getGTF) 
+  if (!is.null(gtf)) {
+    stopifnot(file.exists(gtf))
+    gtfs <- gtf
+  } else {
+    ## this means they were collapsed to gene level already
+    gtfs <- sapply(cmds, .getGTF) 
+  }
   if (length(unique(gtfs)) > 1) stop("Some quants use different GTF files.") 
   gtf <- unique(gtfs)  
 

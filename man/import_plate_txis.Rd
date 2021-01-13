@@ -4,7 +4,7 @@
 \alias{import_plate_txis}
 \title{import plate-seq velocity information (from Salmon) to a SingleCellExperiment}
 \usage{
-import_plate_txis(quants, t2g = NA, type = "salmon", ...)
+import_plate_txis(quants, t2g = NA, type = "salmon", gtf = NULL, ...)
 }
 \arguments{
 \item{quants}{where the quant.sf files are}
@@ -12,6 +12,8 @@ import_plate_txis(quants, t2g = NA, type = "salmon", ...)
 \item{t2g}{required file with tx2gene information for TPM calcs}
 
 \item{type}{What type of quantifications are these? ("salmon")}
+
+\item{gtf}{Where an expanded GTF lives if not already collapsed to gene-level}
 
 \item{...}{additional parameters to pass to tximport, if any}
 }
