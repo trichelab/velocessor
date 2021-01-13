@@ -4,7 +4,14 @@
 \alias{import_plate_txis}
 \title{import plate-seq velocity information (from Salmon) to a SingleCellExperiment}
 \usage{
-import_plate_txis(quants, t2g = NA, type = "salmon", ...)
+import_plate_txis(
+  quants,
+  t2g = NA,
+  type = "salmon",
+  gtf = NULL,
+  qc = TRUE,
+  ...
+)
 }
 \arguments{
 \item{quants}{where the quant.sf files are}
@@ -12,6 +19,10 @@ import_plate_txis(quants, t2g = NA, type = "salmon", ...)
 \item{t2g}{required file with tx2gene information for TPM calcs}
 
 \item{type}{What type of quantifications are these? ("salmon")}
+
+\item{gtf}{Where an expanded GTF lives if not already collapsed to gene-level}
+
+\item{qc}{Whether some quick QC should be performed to toss low-quality cells}
 
 \item{...}{additional parameters to pass to tximport, if any}
 }
@@ -26,4 +37,5 @@ and so forth.
 }
 \details{
 FIXME: Add Kallisto support and Arkas style txome/repeatome/spikeome support.
+FIXME: Add in ability to support bootstraps/Gibbs samples from salmon
 }

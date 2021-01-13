@@ -2,7 +2,7 @@ Package: velocessor
 Type: Package
 Title: The world's dumbest single-cell RNA velocity calculator and loader
 Description: Velocessor provides some convenience functions for RNA velocity loading, batch correction, and plotting in a Bioconductor environment. 
-Version: 0.13.13
+Version: 0.13.15
 Date: 2021-01-13
 Authors@R: person("Tim", "Triche, Jr.", role=c("aut", "cre"), email="trichelab@gmail.com")
 Author: Tim Triche, Jr. [aut, cre]
@@ -35,6 +35,7 @@ Imports:
     basilisk,
     eisaR,
     mclust,
+    mbkmeans,
     igraph,
     fishpond,
     jsonlite,
@@ -53,7 +54,6 @@ Suggests:
     compartmap (>= 1.7.2),
     harmony,
     symphony,
-    mbkmeans,
     tidyverse, 
     infercnv,
     annotationTools
