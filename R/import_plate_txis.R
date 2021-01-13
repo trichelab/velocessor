@@ -11,6 +11,7 @@
 #' @param   t2g     required file with tx2gene information for TPM calcs
 #' @param   type    What type of quantifications are these? ("salmon") 
 #' @param   gtf     Where an expanded GTF lives if not already collapsed to gene-level
+#' @param   qc      Whether some quick QC should be performed to toss low-quality cells
 #' @param   ...     additional parameters to pass to tximport, if any
 #' 
 #' @return          A SingleCellExperiment with 'spliced' & 'unspliced' assays.
@@ -24,7 +25,7 @@
 #' 
 #' @export
 import_plate_txis <- function(quants, t2g=NA, type="salmon",
-                              gtf=NULL, ...) {
+                              gtf=NULL, qc=TRUE, ...) {
 
   if (is.na(t2g)) {
     message("No transcript to gene mapping file provided. Cannot compute TPM.")
@@ -89,6 +90,11 @@ import_plate_txis <- function(quants, t2g=NA, type="salmon",
 
   message("adding NumGenesExpressed...")
   txis$NumGenesExpressed <- colSums(counts(txis) > 0)
+  
+  if (qc) {
+    message("quick QC...")
+    txis <- .quickQC(txis)
+  }
 
   message("adding logNormCounts...")
   txis <- scuttle::logNormCounts(txis)
@@ -117,4 +123,11 @@ import_plate_txis <- function(quants, t2g=NA, type="salmon",
 .removeEmptyCells <- function(se) {
   message("Removing failed cells.")
   se[,colSums(assay(se)) > 0]
+}
+
+# helper fn
+.quickQC <- function(se) {
+  qcstats <- scuttle::perCellQCMetrics(se)
+  qcfilter <- scuttle::quickPerCellQC(qcstats)
+  se[,!qcfilter$discard]
 }
