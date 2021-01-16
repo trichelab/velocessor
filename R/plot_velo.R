@@ -33,7 +33,7 @@ plot_velo <- function(txis, embed="UMAP", replace=FALSE, colr="velocity_pseudoti
   # now actually get to work 
   stopifnot(nrow(reducedDims(txis)[[embed]]) == nrow(embedded))
   stopifnot(ncol(reducedDims(txis)[[embed]]) >= ncol(embedded))
-  cols <- seq_along(ncols(embedded))
+  cols <- seq_len(ncol(embedded))
   dat <- velociraptor::gridVectors(reducedDims(txis)[[embed]][,cols], embedded)
   rownames(dat) <- colnames(txis)[as.integer(rownames(dat))]
   swap <- c(".1"="X", ".2"="Y", ".3"="Z", "start"="")
