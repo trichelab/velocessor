@@ -50,6 +50,8 @@ import_plate_txis <- function(quants, t2g=NA, type="salmon",
   }
   if (length(unique(gtfs)) > 1) stop("Some quants use different GTF files.") 
   gtf <- unique(gtfs)  
+  stopifnot(file.exists(gtf))
+  # because the next step can take a LONG time:
 
   message("Processing ", quants[1], " through ", quants[length(quants)], "...")
   mats <- tximport(quants, type="salmon", txIn=TRUE, tx2gene=tx2gene, ...)

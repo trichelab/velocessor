@@ -26,6 +26,8 @@ import_droplet_txis(
 
 \item{tpms}{compute TPMs? (FALSE; can create a CHOLMOD error)}
 
+\item{su_tpms}{compute spliced/unspliced TPMs? (FALSE; as above)}
+
 \item{sep}{What string separates sample name from barcode? ("_")}
 
 \item{...}{additional parameters to pass to tximport, if any}

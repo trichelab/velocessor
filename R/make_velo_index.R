@@ -25,7 +25,8 @@ make_velo_index <- function(gtf, fa=NULL, flank=90L, intron=TRUE, verbose=TRUE){
   if (!file.exists(fa)) stop("Cannot find the FASTA file ", fa)
 
   # spliced and unspliced, or just spliced?
-  feats <- ifelse(intron, c("spliced","intron"), c("spliced"))
+  feats <- c("spliced")
+  if (intron) feats <- c("spliced","intron")
 
   # extract the ranges for the cDNA seqs
   grl <- eisaR::getFeatureRanges(gtf=gtf, 
@@ -36,32 +37,44 @@ make_velo_index <- function(gtf, fa=NULL, flank=90L, intron=TRUE, verbose=TRUE){
                                  verbose=TRUE) 
 
   # spliced-only vs. velocity-aware
-  expansion <- ifelse(intron, "velo", "static")
+  expansion <- c("velo", "static")[length(feats)] # somewhat foolproof
 
   # extract the cDNA sequences for each tx
   genome <- Biostrings::readDNAStringSet(fa)
   names(genome) <- sapply(strsplit(names(genome), " "), .subset, 1)
+  GenomeInfoDb::seqlevelsStyle(names(genome)) <- 
+    GenomeInfoDb::seqlevelsStyle(grl) # somewhat awkward
+  
+  # warn if there are transcripts on contigs not in the FASTA, and prune them
+  if (any(!seqlevels(grl) %in% names(genome))) {
+    warning("Your GTF has transcripts on contigs not present in your FASTA.")
+    grl <- keepSeqlevels(grl, names(genome), pruning.mode="coarse")
+    warning("Transcriptome pruned to only reference contigs in FASTA.")
+  }
+  # in the past, this usually meant the seqlevelsStyle was out of sync
+
+  # proceed to extract the appropriate transcript sequences
   seqs <- GenomicFeatures::extractTranscriptSeqs(x=genome, transcript=grl)
 
   # write out an annotated version for salmon to index
-  faSub <- paste("annotation", expansion, "fa", sep=".")
+  faSub <- paste(expansion, "fa", sep=".")
   expandedFasta <- sub("\\.gz", "", sub("gtf", faSub, gtf))
   Biostrings::writeXStringSet(seqs, filepath=expandedFasta)
 
   # write out an annotated version of the GTF for tximeta 
-  gtfSub <- paste("annotation", expansion, "gtf", sep=".")
+  gtfSub <- paste(expansion, "gtf", sep=".")
   expandedGtf <- sub("\\.gz", "", sub("gtf", gtfSub, gtf))
   eisaR::exportToGtf(grl, filepath=expandedGtf)
 
   # write out the feature table 
-  featureSub <- paste("annotation", expansion, "features", "tsv", sep=".")
+  featureSub <- paste(expansion, "features", "tsv", sep=".")
   feat <- sub("\\.gz", "", sub("gtf", featureSub, gtf))
   write.table(metadata(grl)$corrgene, row.names=FALSE, col.names=TRUE, 
               file=feat, quote=FALSE, sep="\t")
   
   # write out the transcript to gene table 
-  t2gSub <- paste("annotation", expansion, "tx2gene", "tsv", sep=".")
-  t2g <- sub("\\.gz", "", sub("gtf", "annotation.expanded.tx2gene.tsv", gtf))
+  t2gSub <- paste(expansion, "tx2gene", "tsv", sep=".")
+  t2g <- sub("\\.gz", "", sub("gtf", "expanded.tx2gene.tsv", gtf))
   df <- eisaR::getTx2Gene(grl, filepath=t2g)
 
   # instructions

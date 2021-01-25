@@ -13,8 +13,14 @@
 #' @param   type    What type of quantifications are these? ("alevin") 
 #' @param   QC      Perform rudimentary quality control? (TRUE) 
 #' @param   tpms    compute TPMs? (FALSE; can create a CHOLMOD error)
+#' @param   su_tpms compute spliced/unspliced TPMs? (FALSE; as above)
 #' @param   sep     What string separates sample name from barcode? ("_")
 #' @param   ...     additional parameters to pass to tximport, if any
+#' 
+#' @details 
+#' TPM calculation is disabled by default due to a tendency to crash sessions.
+#' The function velocessor::add_tpm handles the grunt work for this at present.
+#' It would probably be a good idea to do it more efficiently (e.g. in C++). 
 #' 
 #' @return          A SingleCellExperiment with 'spliced' & 'unspliced' assays.
 #' 
@@ -29,7 +35,7 @@
 #' @import SingleCellExperiment
 #' 
 #' @export
-import_droplet_txis <- function(quants, feats=NULL, type=c("alevin"), QC=TRUE, tpms=FALSE, sep="_", ...) {
+import_droplet_txis <- function(quants, feats=NULL, type=c("alevin"), QC=TRUE, tpms=FALSE, su_tpms=FALSE, sep="_", ...) {
 
   params <- data.frame() 
   type <- match.arg(type) 
@@ -86,7 +92,7 @@ import_droplet_txis <- function(quants, feats=NULL, type=c("alevin"), QC=TRUE, t
  
   if (tpms) {  
     message("Calculating TPMs...")
-    txis <- .compute_tpms(txis) 
+    txis <- add_tpm(txis)
   }
 
   # stupid simple QC
@@ -128,21 +134,6 @@ import_droplet_txis <- function(quants, feats=NULL, type=c("alevin"), QC=TRUE, t
   gxs <- subset(rtracklayer::import(gtf), type=="gene")
   names(gxs) <- gxs$gene_id
   granges(gxs) 
-
-}
-
-
-# helper fn
-.compute_tpms <- function(txis) { 
-  
-  summed <- assay(txis, "spliced") + assay(txis, "unspliced") 
-  colsummed <- colSums(summed)
-  assay(txis, "tpm") <- sweep(summed, 2, colsummed, `/`) * 1e6 
-  assay(txis, "spliced_tpm") <- 
-    sweep(assay(txis, "spliced"), 2, colsummed, `/`) * 1e6 
-  assay(txis, "unspliced_tpm") <- 
-    sweep(assay(txis, "unspliced"), 2, colsummed, `/`) * 1e6 
-  return(txis)
 
 }
 

@@ -16,4 +16,5 @@ add_tpm(txis)
 \description{
 Warning: this is notorious for crashing R sessions when run on droplet data.
 Warning number two: don't run this on plate-seq data (UMIed or otherwise)!
+FIXME: use the quick skip-all-0-rows approach to make this go reliably.
 }
