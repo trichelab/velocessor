@@ -37,7 +37,7 @@ make_velo_index <- function(gtf, fa=NULL, flank=90L, intron=TRUE, verbose=TRUE){
                                  verbose=TRUE) 
 
   # spliced-only vs. velocity-aware
-  expansion <- c("velo", "static")[length(feats)] # somewhat foolproof
+  expansion <- c("static", "velo")[length(feats)] # somewhat foolproof
 
   # extract the cDNA sequences for each tx
   genome <- Biostrings::readDNAStringSet(fa)
