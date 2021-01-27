@@ -4,7 +4,7 @@
 \alias{add_densmap}
 \title{run densMAP and store the result in reducedDim(x, "DENSMAP")}
 \usage{
-add_densmap(x, nc = 6, rdn = NULL, ...)
+add_densmap(x, nc = 3L, rdn = NULL, ...)
 }
 \arguments{
 \item{x}{a SingleCellExperiment or a slice of one}

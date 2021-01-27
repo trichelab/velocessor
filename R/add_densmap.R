@@ -12,7 +12,7 @@
 #' @import        densvis
 #' 
 #' @export
-add_densmap <- function(x, nc=6, rdn=NULL, ...) { 
+add_densmap <- function(x, nc=3L, rdn=NULL, ...) { 
 
   rdns <- reducedDimNames(x)
   if (is.null(rdn)) rdn <- ifelse("HARMONY" %in% rdns, "HARMONY", "PCA")
@@ -21,7 +21,7 @@ add_densmap <- function(x, nc=6, rdn=NULL, ...) {
   stopifnot(rdn %in% rdns)
 
   reducedDim(x, "DENSMAP") <- densvis::densmap(x=reducedDim(x, rdn), 
-                                          n_components=nc, ...) 
+                                               n_components=nc, ...) 
   return(x)
 
 }

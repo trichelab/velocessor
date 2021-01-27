@@ -1,7 +1,7 @@
 #' run UMAP with `uwot` and store the embedding model in metadata(x)$uwot
 #' 
 #' @param x     a SingleCellExperiment or a slice of one
-#' @param nc    how many components to keep for `uwot`'s UMAP embedding (6)
+#' @param nc    how many components to keep for `uwot`'s UMAP embedding (3)
 #' @param ret   return the modified "sce" (default) or "uwot" model? ("sce")
 #' @param rdn   reducedDimName to use ("HARMONY" if present, "PCA" otherwise)
 #' @param ...   additional parameters for uwot::umap (e.g. `y` for SDR)
@@ -13,7 +13,7 @@
 #' @import      uwot
 #' 
 #' @export
-add_umap_embedding <- function(x, nc=6, ret=c("sce","uwot"), rdn=NULL, ...) {
+add_umap_embedding <- function(x, nc=3L, ret=c("sce","uwot"), rdn=NULL, ...) {
 
   ret <- match.arg(ret)
   rdns <- reducedDimNames(x)

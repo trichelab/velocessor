@@ -4,12 +4,12 @@
 \alias{add_umap_embedding}
 \title{run UMAP with \code{uwot} and store the embedding model in metadata(x)$uwot}
 \usage{
-add_umap_embedding(x, nc = 6, ret = c("sce", "uwot"), rdn = NULL, ...)
+add_umap_embedding(x, nc = 3L, ret = c("sce", "uwot"), rdn = NULL, ...)
 }
 \arguments{
 \item{x}{a SingleCellExperiment or a slice of one}
 
-\item{nc}{how many components to keep for \code{uwot}'s UMAP embedding (6)}
+\item{nc}{how many components to keep for \code{uwot}'s UMAP embedding (3)}
 
 \item{ret}{return the modified "sce" (default) or "uwot" model? ("sce")}
 
