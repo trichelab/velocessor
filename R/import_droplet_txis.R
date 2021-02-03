@@ -15,6 +15,7 @@
 #' @param   tpms    compute TPMs? (FALSE; can create a CHOLMOD error)
 #' @param   su_tpms compute spliced/unspliced TPMs? (FALSE; as above)
 #' @param   sep     What string separates sample name from barcode? ("_")
+#' @param   fixrn   Fix goofy versioned ENSEMBL gene names? (TRUE) 
 #' @param   ...     additional parameters to pass to tximport, if any
 #' 
 #' @details 
@@ -35,7 +36,7 @@
 #' @import SingleCellExperiment
 #' 
 #' @export
-import_droplet_txis <- function(quants, feats=NULL, type=c("alevin"), QC=TRUE, tpms=FALSE, su_tpms=FALSE, sep="_", ...) {
+import_droplet_txis <- function(quants, feats=NULL, type=c("alevin"), QC=TRUE, tpms=FALSE, su_tpms=FALSE, sep="_", fixrn=TRUE,...) {
 
   params <- data.frame() 
   type <- match.arg(type) 
@@ -103,6 +104,11 @@ import_droplet_txis <- function(quants, feats=NULL, type=c("alevin"), QC=TRUE, t
     message("adding logNormCounts...")
     print(system.time(txis <- scuttle::logNormCounts(txis)))
   } 
+
+  if (fixrn) {
+    message("Fixing goofy row names...")
+    rownames(txis) <- fix_rownames(txis)
+  }
 
   message("Done.")
   metadata(txis)$origin <- "droplet"

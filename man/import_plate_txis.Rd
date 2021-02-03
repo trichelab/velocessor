@@ -10,6 +10,7 @@ import_plate_txis(
   type = "salmon",
   gtf = NULL,
   qc = TRUE,
+  fixrn = TRUE,
   ...
 )
 }
@@ -20,9 +21,11 @@ import_plate_txis(
 
 \item{type}{What type of quantifications are these? ("salmon")}
 
-\item{gtf}{Where an expanded GTF lives if not already collapsed to gene-level}
+\item{gtf}{Where an expanded GTF lives if not collapsed to gene-level}
 
-\item{qc}{Whether some quick QC should be performed to toss low-quality cells}
+\item{qc}{Whether QC should be performed to toss low-quality cells}
+
+\item{fixrn}{Fix goofy versioned ENSEMBL gene names? (TRUE)}
 
 \item{...}{additional parameters to pass to tximport, if any}
 }

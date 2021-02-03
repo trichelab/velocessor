@@ -10,8 +10,9 @@
 #' @param   quants  where the quant.sf files are
 #' @param   t2g     required file with tx2gene information for TPM calcs
 #' @param   type    What type of quantifications are these? ("salmon") 
-#' @param   gtf     Where an expanded GTF lives if not already collapsed to gene-level
-#' @param   qc      Whether some quick QC should be performed to toss low-quality cells
+#' @param   gtf     Where an expanded GTF lives if not collapsed to gene-level
+#' @param   qc      Whether QC should be performed to toss low-quality cells
+#' @param   fixrn   Fix goofy versioned ENSEMBL gene names? (TRUE) 
 #' @param   ...     additional parameters to pass to tximport, if any
 #' 
 #' @return          A SingleCellExperiment with 'spliced' & 'unspliced' assays.
@@ -25,7 +26,7 @@
 #' 
 #' @export
 import_plate_txis <- function(quants, t2g=NA, type="salmon",
-                              gtf=NULL, qc=TRUE, ...) {
+                              gtf=NULL, qc=TRUE, fixrn=TRUE, ...) {
 
   if (is.na(t2g)) {
     message("No transcript to gene mapping file provided. Cannot compute TPM.")
@@ -62,7 +63,7 @@ import_plate_txis <- function(quants, t2g=NA, type="salmon",
   rr <- .rowRanges(gtf, asys)
   
   message("Constructing sample annotations...")
-  cd <- DataFrame(sample=quants)
+  cd <- DataFrame(sample=make.unique(quants))
   if (!is.null(names(quants))) cd <- DataFrame(sample=names(quants))
   txi <- SingleCellExperiment(asys, rowRanges=rr, colData=cd)
   
@@ -96,6 +97,11 @@ import_plate_txis <- function(quants, t2g=NA, type="salmon",
   if (qc) {
     message("quick QC...")
     txis <- .quickQC(txis)
+  }
+
+  if (fixrn) {
+    message("Fixing goofy row names...")
+    rownames(txis) <- fix_rownames(txis)
   }
 
   message("adding logNormCounts...")
