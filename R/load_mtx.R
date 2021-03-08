@@ -5,7 +5,7 @@
 #' for example, CITE-seq data processed with KITE, or when comparing uniquely 
 #' mapped vs. multimapped counts, as one might do for repetitive elements.
 #' 
-#' @param   path      where the *counts files are 
+#' @param   path      where the counts files are (genes, barcodes, mtx)
 #' @param   verbose   be verbose? (TRUE) 
 #' 
 #' @return            a dgCMatrix 
@@ -15,7 +15,7 @@
 #' @export
 load_mtx <- function(path, verbose=TRUE) {
 
-  frags <- c(mat=".mtx", genes=".genes.txt", cells=".barcodes.txt")
+  frags <- c(mat=".mtx", genes=".genes.txt", barcodes=".barcodes.txt")
   files <- lapply(frags, function(fr) grep(fr, list.files(path), value=TRUE))
   files <- lapply(files, function(fl) file.path(path, fl))
   dat <- as(with(files, t(readMM(mat))), "CsparseMatrix")
