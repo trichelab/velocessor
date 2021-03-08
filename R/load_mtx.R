@@ -15,7 +15,7 @@
 #' @export
 load_mtx <- function(path, verbose=TRUE) {
 
-  frags <- c(mat="mtx", genes="genes", cells="barcodes")
+  frags <- c(mat=".mtx", genes=".genes.txt", cells=".barcodes.txt")
   files <- lapply(frags, function(fr) grep(fr, list.files(path), value=TRUE))
   files <- lapply(files, function(fl) file.path(path, fl))
   dat <- as(with(files, t(readMM(mat))), "CsparseMatrix")
