@@ -27,7 +27,7 @@ load_mtx <- function(path, verbose=TRUE) {
   if(verbose) message("Labeled ", nrow(dat), " rows.")
 
   cols <- with(files, read.table(barcodes)[,1])
-  stopifnot(length(barcodes) == ncol(dat))
+  stopifnot(length(cols) == ncol(dat))
   colnames(dat) <- cols
   if(verbose) message("Labeled ", ncol(dat), " columns.")
 
