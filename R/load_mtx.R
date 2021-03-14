@@ -27,7 +27,7 @@ load_mtx <- function(path=".", verbose=TRUE, frags=NULL, splt=FALSE, spltcol=3){
 
   files <- lapply(frags, function(fr) grep(fr, list.files(path), value=TRUE))
   files <- lapply(files, function(fl) file.path(path, fl))
-  dat <- with(files, .readSparseMat)
+  dat <- with(files, .readSparseMat(mat))
   if(verbose) message("Loaded ", nrow(dat), " rows x ", ncol(dat), " columns.")
 
   rows <- with(files, read.table(features)[,1])
@@ -50,4 +50,4 @@ load_mtx <- function(path=".", verbose=TRUE, frags=NULL, splt=FALSE, spltcol=3){
 
 
 # helper fn, refactored out of the above for ease of repurposing
-.readSparseMat <- function(mm) as(t(readMM(mat)), "CsparseMatrix")
+.readSparseMat <- function(mat) as(t(readMM(mat)), "CsparseMatrix")
