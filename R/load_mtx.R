@@ -5,23 +5,32 @@
 #' for example, CITE-seq data processed with KITE, or when comparing uniquely 
 #' mapped vs. multimapped counts, as one might do for repetitive elements.
 #' 
-#' @param   path      where the counts files are (genes, barcodes, mtx)
-#' @param   verbose   be verbose? (TRUE) 
+#' @param   path      where the counts files are (features, barcodes, mtx)
+#' @param   verbose   be verbose? (TRUE)
+#' @param   frags     optional patterns to scan for features, barcodes, matrix
+#' @param   splt      split by feature type? (FALSE)
+#' @param   spltcol   if splitting by feature type, which column to use? (3)
 #' 
 #' @return            a dgCMatrix 
 #' 
 #' @import  Matrix
 #' 
 #' @export
-load_mtx <- function(path, verbose=TRUE) {
+load_mtx <- function(path, verbose=TRUE, frags=NULL, splt=FALSE, spltcol=3) {
 
-  frags <- c(mat=".mtx", genes=".genes.txt", barcodes=".barcodes.txt")
+  if (is.null(frags)) {
+    frags <- c(features=".genes.txt", 
+               barcodes=".barcodes.txt",
+               mat=".mtx")
+  }
+  stopifnot(all(c("features", "barcodes", "mat") %in% names(frags)))
+
   files <- lapply(frags, function(fr) grep(fr, list.files(path), value=TRUE))
   files <- lapply(files, function(fl) file.path(path, fl))
-  dat <- as(with(files, t(readMM(mat))), "CsparseMatrix")
+  dat <- with(files, .readSparseMat)
   if(verbose) message("Loaded ", nrow(dat), " rows x ", ncol(dat), " columns.")
 
-  rows <- with(files, read.table(genes)[,1])
+  rows <- with(files, read.table(features)[,1])
   stopifnot(length(rows) == nrow(dat))
   rownames(dat) <- rows
   if(verbose) message("Labeled ", nrow(dat), " rows.")
@@ -31,6 +40,14 @@ load_mtx <- function(path, verbose=TRUE) {
   colnames(dat) <- cols
   if(verbose) message("Labeled ", ncol(dat), " columns.")
 
+  if (splt) {
+    rowsplit <- with(files, read.table(features)[, spltcol])
+    dat <- split(dat, rowsplit)
+  } 
   return(dat)
 
 }
+
+
+# helper fn, refactored out of the above for ease of repurposing
+.readSparseMat <- function(mm) as(t(readMM(mat)), "CsparseMatrix")

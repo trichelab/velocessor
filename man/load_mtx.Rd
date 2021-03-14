@@ -4,12 +4,18 @@
 \alias{load_mtx}
 \title{Load a triple of gene names, cell names, gene x cell counts as from bustools}
 \usage{
-load_mtx(path, verbose = TRUE)
+load_mtx(path, verbose = TRUE, frags = NULL, splt = FALSE, spltcol = 3)
 }
 \arguments{
-\item{path}{where the counts files are (genes, barcodes, mtx)}
+\item{path}{where the counts files are (features, barcodes, mtx)}
 
 \item{verbose}{be verbose? (TRUE)}
+
+\item{frags}{optional patterns to scan for features, barcodes, matrix}
+
+\item{splt}{split by feature type? (FALSE)}
+
+\item{spltcol}{if splitting by feature type, which column to use? (3)}
 }
 \value{
 \preformatted{       a dgCMatrix 
