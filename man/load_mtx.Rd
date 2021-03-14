@@ -4,10 +4,10 @@
 \alias{load_mtx}
 \title{Load a triple of gene names, cell names, gene x cell counts as from bustools}
 \usage{
-load_mtx(path, verbose = TRUE, frags = NULL, splt = FALSE, spltcol = 3)
+load_mtx(path = ".", verbose = TRUE, frags = NULL, splt = FALSE, spltcol = 3)
 }
 \arguments{
-\item{path}{where the counts files are (features, barcodes, mtx)}
+\item{path}{where the counts files (features, barcodes, mtx) (".")}
 
 \item{verbose}{be verbose? (TRUE)}
 

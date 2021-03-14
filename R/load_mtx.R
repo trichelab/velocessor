@@ -5,7 +5,7 @@
 #' for example, CITE-seq data processed with KITE, or when comparing uniquely 
 #' mapped vs. multimapped counts, as one might do for repetitive elements.
 #' 
-#' @param   path      where the counts files are (features, barcodes, mtx)
+#' @param   path      where the counts files (features, barcodes, mtx) (".")
 #' @param   verbose   be verbose? (TRUE)
 #' @param   frags     optional patterns to scan for features, barcodes, matrix
 #' @param   splt      split by feature type? (FALSE)
@@ -16,11 +16,11 @@
 #' @import  Matrix
 #' 
 #' @export
-load_mtx <- function(path, verbose=TRUE, frags=NULL, splt=FALSE, spltcol=3) {
+load_mtx <- function(path=".", verbose=TRUE, frags=NULL, splt=FALSE, spltcol=3){
 
   if (is.null(frags)) {
-    frags <- c(features=".genes.txt", 
-               barcodes=".barcodes.txt",
+    frags <- c(features=".(features|genes).(txt|tsv)", 
+               barcodes=".(cells|barcodes).(txt|tsv)",
                mat=".mtx")
   }
   stopifnot(all(c("features", "barcodes", "mat") %in% names(frags)))
