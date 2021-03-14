@@ -19,8 +19,8 @@
 load_mtx <- function(path=".", verbose=TRUE, frags=NULL, splt=FALSE, spltcol=3){
 
   if (is.null(frags)) {
-    frags <- c(features=".(features|genes).(txt|tsv)", 
-               barcodes=".(cells|barcodes).(txt|tsv)",
+    frags <- c(features="(features|genes).(txt|tsv)", 
+               barcodes="(cells|barcodes).(txt|tsv)",
                mat=".mtx")
   }
   stopifnot(all(c("features", "barcodes", "mat") %in% names(frags)))
