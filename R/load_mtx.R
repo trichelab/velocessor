@@ -28,9 +28,10 @@ load_mtx <- function(path=".", verbose=TRUE, frags=NULL, splt=FALSE, spltcol=3){
   files <- lapply(frags, function(fr) grep(fr, list.files(path), value=TRUE))
   files <- lapply(files, function(fl) file.path(path, fl))
   dat <- with(files, .readSparseMat(mat))
-  if(verbose) message("Loaded ", nrow(dat), " rows x ", ncol(dat), " columns.")
 
   rows <- with(files, read.table(features)[,1])
+  if (length(rows) == ncol(dat)) dat <- as(t(dat), "CsparseMatrix")
+  if(verbose) message("Loaded ", nrow(dat), " rows x ", ncol(dat), " columns.")
   stopifnot(length(rows) == nrow(dat))
   rownames(dat) <- rows
   if(verbose) message("Labeled ", nrow(dat), " rows.")
