@@ -12,7 +12,10 @@
 #' @param   spltcol   if splitting by feature type, which column to use? (3)
 #' 
 #' @return            a dgCMatrix 
-#' 
+#'
+#' @details
+#' This function works fine on gzipped files (tested on a 180K x 2761K matrix). 
+#'
 #' @import  Matrix
 #' 
 #' @export

@@ -16,6 +16,7 @@ fix_cells(txis, clean = TRUE)
 }
 }
 \description{
-Also attempts to use scran::cleanSizeFactors to recover dubious cells,
+Also attempts to use scuttle::cleanSizeFactors to recover dubious cells,
 if NumGenesExpressed is a column in colData(txis).  This may or may not be
+the world's greatest idea
 }

@@ -1,7 +1,8 @@
 #' fix or drop cells with an size factor of 0 (which will crash scvelo). 
 #' 
-#' Also attempts to use scran::cleanSizeFactors to recover dubious cells, 
+#' Also attempts to use scuttle::cleanSizeFactors to recover dubious cells, 
 #' if NumGenesExpressed is a column in colData(txis).  This may or may not be 
+#' the world's greatest idea
 #'
 #' @param txis          a SingleCellExperiment
 #' @param clean         fix negative size factors with cleanSizeFactors? (FALSE)
@@ -9,7 +10,7 @@
 #' @return              a SingleCellExperiment with any useless cells omitted
 #'
 #' @importFrom scuttle  librarySizeFactors
-#' @importFrom scran    cleanSizeFactors
+#' @importFrom scuttle  cleanSizeFactors
 #' 
 #' @export
 fix_cells <- function(txis, clean=TRUE) { 

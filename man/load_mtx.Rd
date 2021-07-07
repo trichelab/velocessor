@@ -27,3 +27,6 @@ This function is useful when processing data from (e.g.) kallisto|bustools,
 for example, CITE-seq data processed with KITE, or when comparing uniquely
 mapped vs. multimapped counts, as one might do for repetitive elements.
 }
+\details{
+This function works fine on gzipped files (tested on a 180K x 2761K matrix).
+}
