@@ -8,6 +8,8 @@ import_kallisto_txis(
   runs,
   what = c(tpm = "tpm", counts = "est_counts", eff_length = "eff_length"),
   altExps = TRUE,
+  asgenes = FALSE,
+  t2g = NULL,
   BPPARAM = bpparam(),
   ...
 )
@@ -18,6 +20,10 @@ import_kallisto_txis(
 \item{what}{columns to import (default: tpm, est_counts, eff_length)}
 
 \item{altExps}{split spliced, unspliced, spikes, viruses & repeats? (TRUE)}
+
+\item{asgenes}{collapse transcripts to genes? (implies altExps & t2g)}
+
+\item{t2g}{data.frame with tx2gene mappings (required if asgenes)}
 
 \item{BPPARAM}{optional BiocParallel parameter object for bplapply()}
 
@@ -35,4 +41,11 @@ like GENCODE and similar. Default is ERCC spikes, ENSembl transcripts, and
 if found, intronic quantifications of the same. Everything else gets labeled
 as 'viruses_and_repeats' since in our transcriptomes, that's what it is. If
 altExps is set to FALSE, no splitting will be attempted.
+}
+\examples{
+
+t2g <- read.delim("../hs_mm_spikes_repeats_ens100.trimmed.velo.tx2gene.tsv",
+                  sep="\t", row.names=1, head=FALSE)
+t2g <- t2g[grep("ENS", rownames(t2g)), , drop=FALSE]
+
 }

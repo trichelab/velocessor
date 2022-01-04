@@ -11,11 +11,20 @@
 #' @param   runs    a vector of .tsv file paths (usually abundance.tsv) w/names
 #' @param   what    columns to import (default: tpm, est_counts, eff_length)
 #' @param   altExps split spliced, unspliced, spikes, viruses & repeats? (TRUE)
+#' @param   asgenes collapse transcripts to genes? (implies altExps & t2g)
+#' @param   t2g     data.frame with tx2gene mappings (required if asgenes)
 #' @param   BPPARAM optional BiocParallel parameter object for bplapply()
 #' @param   ...     additional parameters to pass to .split_altExps
 #' 
 #' @return          A SingleCellExperiment
 #'
+#'
+#' @examples
+#' 
+#' t2g <- read.delim("../hs_mm_spikes_repeats_ens100.trimmed.velo.tx2gene.tsv",
+#'                   sep="\t", row.names=1, head=FALSE)
+#' t2g <- t2g[grep("ENS", rownames(t2g)), , drop=FALSE]
+#' 
 #' @import          SingleCellExperiment
 #' @import          BiocParallel
 #' 
@@ -25,6 +34,8 @@ import_kallisto_txis <- function(runs,
                                         counts="est_counts",
                                         eff_length="eff_length"),
                                  altExps=TRUE, 
+                                 asgenes=FALSE,
+                                 t2g=NULL,
                                  BPPARAM=bpparam(),
                                  ...) {
 
@@ -41,6 +52,7 @@ import_kallisto_txis <- function(runs,
 
   message("Constructing SingleCellExperiment...")
   sce <- SingleCellExperiment(mats) 
+  if (asgenes) sce <- .collapse_genes(sce, t2g=t2g)
   if (altExps) sce <- .split_altExps(sce, ...)
   return(sce)
 
@@ -80,7 +92,7 @@ import_kallisto_txis <- function(runs,
   res <- do.call(cbind, bplapply(imported, getcol, BPPARAM=BPPARAM))
   rownames(res) <- rownames(imported[[1]])
   colnames(res) <- names(imported)
-  return(res)
+  return(as.matrix(res))
 
 }
 
@@ -108,3 +120,20 @@ import_kallisto_txis <- function(runs,
   splitAltExps(sce, rowData(sce)$type, "spliced")
 
 }
+
+  
+# helper fn; run for spliced and unspliced
+.collapse_genes <- function(sce, t2g) {
+
+  mappable <- grep("ENS", rownames(sce))
+  for (asy in assayNames(sce)) { 
+    message("Collapsing ", asy, " from transcripts to genes...") 
+    
+    stop("Not done.") 
+  }
+
+}
+
+
+# helper fn; quantify biotypes
+
